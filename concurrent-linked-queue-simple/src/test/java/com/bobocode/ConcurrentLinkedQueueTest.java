@@ -40,10 +40,24 @@ public class ConcurrentLinkedQueueTest {
     public void testAddElement() {
         integerQueue.add(324);
         integerQueue.add(23);
-
+        integerQueue.add(88);
+        integerQueue.add(366);
         integerQueue.add(5);
 
-        assertEquals(5, integerQueue.poll().intValue());
+        assertEquals(324, integerQueue.poll().intValue());
+    }
+
+    @Test
+    public void testPollElement() {
+        integerQueue.add(12);
+        integerQueue.add(333);
+        integerQueue.add(98);
+        integerQueue.add(344);
+
+        integerQueue.poll(); // should poll 12
+        integerQueue.poll(); // should poll 333
+
+        assertEquals(98, integerQueue.poll().intValue());
     }
 
     @Test
