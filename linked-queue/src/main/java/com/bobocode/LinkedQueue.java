@@ -7,15 +7,18 @@ package com.bobocode;
  */
 public class LinkedQueue<T> implements Queue<T> {
     private Node<T> head;
+    private Node<T> tail;
     private int size;
 
     @Override
     public void add(T element) {
         Node<T> newNode = Node.valueOf(element);
-        if (head != null) {
-            newNode.setNext(head);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.setNext(newNode);
+            tail = newNode;
         }
-        head = newNode;
         size++;
     }
 
@@ -24,6 +27,9 @@ public class LinkedQueue<T> implements Queue<T> {
         if (head != null) {
             T element = head.getElement();
             head = head.getNext();
+            if (head == null) {
+                tail = null;
+            }
             size--;
             return element;
         } else {
