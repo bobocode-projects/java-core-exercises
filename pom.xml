@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>linked-queue</module>
+        <module>concurrent-linked-queue-simple</module>
     </modules>
     <packaging>pom</packaging>
 
