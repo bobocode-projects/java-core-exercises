@@ -11,4 +11,5 @@ It is important to have a different type of activities, which purpose is improvi
 ***An exercise** is a predefined task that you continuously implement to improve a certain skill* :muscle:
 ##
 * [Linked queue](https://github.com/boy4uck/java-core-exercises/tree/master/linked-queue)
+* [Concurrent linked queue simple](https://github.com/bobocode-projects/java-core-exercises/tree/master/concurrent-linked-queue-simple)
 

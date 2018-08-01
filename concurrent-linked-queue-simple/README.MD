@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>Linked queue exercise :muscle:
+# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>Concurrent linked queue (simple) exercise :muscle:
 Improve your Java Concurrent skills
 ### Task
 `Queue` is an API that represents queue data structure that follows "first in, first out" rule (FIFO). Your job is to 
