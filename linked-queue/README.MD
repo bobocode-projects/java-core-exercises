@@ -3,7 +3,7 @@ Improve your Java SE skills
 ### Task
 `Queue` is an API that represents queue data structure that follows "first in, first out" rule (FIFO). Your job is to 
 implement the *todo* section of the class `LinkedQueue`. Please note, that your implementation should be based on liked 
- queue, e.g. liked nodes. It means that you should create your own class `Node<T>` that will hold queue elements.
+ queue, e.g. linked nodes. It means that you should create your own class `Node<T>` that will hold queue elements.
   
 To verify your implementation, run `QueueTest.java`
  
