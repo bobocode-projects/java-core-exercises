@@ -35,10 +35,9 @@ public class QueueTest {
     public void testAddElement() {
         integerQueue.add(324);
         integerQueue.add(23);
-
         integerQueue.add(5);
 
-        assertEquals(5, integerQueue.poll().intValue());
+        assertEquals(324, integerQueue.poll().intValue());
     }
 
     @Test
@@ -46,8 +45,9 @@ public class QueueTest {
         integerQueue.add(33);
         integerQueue.add(123);
         integerQueue.add(222);
+        integerQueue.add(444);
 
-        integerQueue.poll();
+        integerQueue.poll(); // should poll 33
 
         assertEquals(123, integerQueue.poll().intValue());
     }
@@ -69,6 +69,20 @@ public class QueueTest {
 
         assertFalse(integerQueue.isEmpty());
 
+    }
+
+    @Test
+    public void testPollLastElement() {
+        integerQueue.add(8);
+        integerQueue.add(123);
+        integerQueue.add(99);
+        integerQueue.add(46);
+
+        integerQueue.poll(); // should poll 8
+        integerQueue.poll(); // should poll 123
+        integerQueue.poll(); // should poll 99
+
+        assertEquals(46, integerQueue.poll().intValue());
     }
 
 }
