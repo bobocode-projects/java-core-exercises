@@ -5,7 +5,7 @@ package com.bobocode;
  */
 public interface Queue<T> {
     /**
-     * Adds an element to the head of the queue.
+     * Adds an element to the end of the queue.
      *
      * @param element the element to add
      */
