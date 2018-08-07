@@ -6,6 +6,19 @@ package com.bobocode;
  * @param <T> a generic parameter
  */
 public class LinkedQueue<T> implements Queue<T> {
+    static final class Node<T> {
+        private T element;
+        private Node<T> next;
+
+        static <T> Node<T> valueOf(T element) {
+            return new Node<>(element);
+        }
+
+        private Node(T element) {
+            this.element = element;
+        }
+    }
+
     private Node<T> head;
     private Node<T> tail;
     private int size;
@@ -16,7 +29,7 @@ public class LinkedQueue<T> implements Queue<T> {
         if (head == null) {
             head = tail = newNode;
         } else {
-            tail.setNext(newNode);
+            tail.next = newNode;
             tail = newNode;
         }
         size++;
@@ -25,8 +38,8 @@ public class LinkedQueue<T> implements Queue<T> {
     @Override
     public T poll() {
         if (head != null) {
-            T element = head.getElement();
-            head = head.getNext();
+            T element = head.element;
+            head = head.next;
             if (head == null) {
                 tail = null;
             }
