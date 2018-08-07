@@ -12,4 +12,5 @@ It is important to have a different type of activities, which purpose is improvi
 ##
 * [Linked queue](https://github.com/boy4uck/java-core-exercises/tree/master/linked-queue)
 * [Concurrent linked queue simple](https://github.com/bobocode-projects/java-core-exercises/tree/master/concurrent-linked-queue-simple)
+* [Linked List](https://github.com/bobocode-projects/java-core-exercises/tree/master/linked-list)
 
