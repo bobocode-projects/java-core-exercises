@@ -109,7 +109,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public void remove(int index) {
-        verifyElementExistAt(0);
+        verifyElementExistAt(index);
         if (index == 0) {
             head = head.next;
         } else {
