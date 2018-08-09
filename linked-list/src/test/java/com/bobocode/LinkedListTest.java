@@ -89,6 +89,8 @@ public class LinkedListTest {
         intList.add(0, 53);
 
         assertEquals(53, intList.get(0).intValue());
+        assertEquals(4, intList.get(1).intValue());
+        assertEquals(7, intList.size());
     }
 
     @Test
