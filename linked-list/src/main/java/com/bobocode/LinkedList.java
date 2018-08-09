@@ -52,7 +52,7 @@ public class LinkedList<T> implements List<T> {
         Node<T> newNode = Node.valueOf(element);
         if (index == 0) {
             if (head != null) {
-                newNode.next = head.next;
+                newNode.next = head;
             }
             head = newNode;
         } else {
