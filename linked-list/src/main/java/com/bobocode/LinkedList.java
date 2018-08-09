@@ -38,6 +38,13 @@ public class LinkedList<T> implements List<T> {
         size++;
     }
 
+    /**
+     * In order to make the implementation simpler this method is used instead of having one more additional parameter
+     * tail
+     *
+     * @param head the first element in the list
+     * @return the last element in the list
+     */
     private Node<T> findTail(Node<T> head) {
         Node<T> currentNode = Objects.requireNonNull(head);
         while (currentNode.next != null) {
