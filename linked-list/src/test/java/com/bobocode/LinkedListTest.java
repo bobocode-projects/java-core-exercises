@@ -117,10 +117,25 @@ public class LinkedListTest {
     }
 
     @Test
+    public void testAddElementByIndexEqualToSize() {
+        intList= LinkedList.of(1, 2, 3, 4, 5); // size = 5
+
+        intList.add(5, 111);
+
+        assertEquals(6, intList.size());
+        assertEquals(111, intList.get(5).intValue());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testSetFirstElementOnEmptyTree() {
         intList.set(0, 34);
+    }
 
-        assertEquals(34, intList.get(0).intValue());
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetElementByIndexEqualToSize() {
+        intList = LinkedList.of(2, 3, 4); // size = 3
+
+        intList.set(3, 222);
     }
 
     @Test
