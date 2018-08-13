@@ -78,7 +78,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public void set(int index, T element) {
-        checkBoundsToAddAt(index);
+        verifyElementExistAt(index);
         if (index == 0) {
             if (head == null) {
                 head = Node.valueOf(element);
@@ -99,7 +99,6 @@ public class LinkedList<T> implements List<T> {
     }
 
     private Node<T> findNodeByIndex(int index) {
-        Objects.checkIndex(index, size);
         verifyElementExistAt(index);
         Node<T> currentNode = head;
         for (int i = 0; i < index; i++) {
