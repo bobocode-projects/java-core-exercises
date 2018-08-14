@@ -11,6 +11,7 @@
         <module>linked-queue</module>
         <module>concurrent-linked-queue-simple</module>
         <module>linked-list</module>
+        <module>file-stats</module>
     </modules>
     <packaging>pom</packaging>
 
