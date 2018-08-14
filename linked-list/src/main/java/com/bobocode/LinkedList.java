@@ -58,9 +58,7 @@ public class LinkedList<T> implements List<T> {
         checkBoundsToAddAt(index);
         Node<T> newNode = Node.valueOf(element);
         if (index == 0) {
-            if (head != null) {
-                newNode.next = head;
-            }
+            newNode.next = head;
             head = newNode;
         } else {
             Node<T> node = findNodeByIndex(index - 1);
