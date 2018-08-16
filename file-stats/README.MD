@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>Files Stats :muscle:
+# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>Files Stats exercise :muscle:
 Improve your Java SE skills
 ### Task
 `FileStats` is an API that allows you to get character statistics based on text file. Your job is to 

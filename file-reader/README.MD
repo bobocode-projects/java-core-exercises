@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>File Reader :muscle:
+# <img src="https://raw.githubusercontent.com/bobocode-projects/resources/master/image/logo_transparent_background.png" height=50/>File Reader exercise :muscle:
 Improve your Java SE and Clean Code skills
 ### Task
 `FileReaders` is an API that allows you to read whole file content into a `String`. Your job is to 
