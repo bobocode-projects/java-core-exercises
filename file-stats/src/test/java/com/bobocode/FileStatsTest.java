@@ -55,8 +55,8 @@ public class FileStatsTest {
 
         boolean lambdaArticleContainsExistingCharacter = lambdaArticleFileStats.containsCharacter('a');
         boolean lambdaArticleContainsWhitespace = lambdaArticleFileStats.containsCharacter(' ');
-        boolean springArticleContainsExistingCharacter = lambdaArticleFileStats.containsCharacter('b');
-        boolean springArticleContainsWhitespace = lambdaArticleFileStats.containsCharacter(' ');
+        boolean springArticleContainsExistingCharacter = springCloudArticleFileStats.containsCharacter('b');
+        boolean springArticleContainsWhitespace = springCloudArticleFileStats.containsCharacter(' ');
 
         assertTrue(lambdaArticleContainsExistingCharacter);
         assertFalse(lambdaArticleContainsWhitespace);
