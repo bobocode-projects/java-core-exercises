@@ -1,12 +1,19 @@
 package com.bobocode;
 
-import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
@@ -24,31 +31,102 @@ public class FileStats {
     private final Character mostPopularCharacter;
 
     public FileStats(String fileName) {
+        int randomApproach = new Random().nextInt(3) + 1;
+        switch (randomApproach) {
+            case 1: {
+                System.out.println(randomApproach + ", using getCharacterStreamFromFile()");
+                Stream<Character> characters = getCharacterStreamFromFile(fileName);
+                characterMap = populateCharacterFrequencyMap(characters);
+                mostPopularCharacter = findMostPopularCharacter(characterMap);
+                break;
+            }
+            case 2: {
+                System.out.println(randomApproach + ", getCharacterStreamFromFileBufferedReader()");
+                Stream<Character> characters = getCharacterStreamFromFileBufferedReader(fileName);
+                characterMap = populateCharacterFrequencyMap(characters);
+                mostPopularCharacter = findMostPopularCharacter(characterMap);
+                break;
+            }
+            case 3: {
+                System.out.println(randomApproach + ", getCharacterStreamFromFileCommonIO()");
+                Stream<Character> characters = getCharacterStreamFromFileCommonIO(fileName);
+                characterMap = populateCharacterFrequencyMap(characters);
+                mostPopularCharacter = findMostPopularCharacter(characterMap);
+                break;
+            }
+            default:
+                characterMap = new HashMap<>();
+                mostPopularCharacter = null;
+                break;
+        }
+    }
+
+    private Stream<Character> getCharacterStreamFromFile(String fileName) {
+        URL fileUrl = getFileUrl(fileName);
+        Path filePath = getFilePath(fileUrl);
+        Stream<String> lines = getStringLineStream(filePath);
+        return lines
+                .flatMapToInt(String::chars)
+                .mapToObj(i -> (char) i);
+    }
+
+    private URL getFileUrl(String fileName) {
+        Objects.requireNonNull(fileName);
         URL fileUrl = getClass().getClassLoader().getResource(fileName);
         if (fileUrl == null) {
             throw new FileStatsException("File " + fileName + " not fount");
         }
-        Path filePath;
+        return fileUrl;
+    }
+
+    private Path getFilePath(URL fileUrl) {
         try {
-            filePath = Paths.get(fileUrl.toURI());
+            return Paths.get(fileUrl.toURI());
         } catch (URISyntaxException e) {
             throw new FileStatsException(e.getMessage(), e);
         }
-        Stream<String> lines;
+    }
+
+    private Stream<String> getStringLineStream(Path filePath) {
         try {
-            lines = Files.lines(filePath);
+            return Files.lines(filePath);
         } catch (IOException e) {
             throw new FileStatsException(e.getMessage(), e);
         }
+    }
 
-        characterMap = lines
-                .flatMapToInt(str -> str.chars())
-                .filter(i -> i != 32)
-                .mapToObj(i -> (char) i)
+    private Stream<Character> getCharacterStreamFromFileBufferedReader(String fileName) {
+        try(BufferedReader br = new BufferedReader(new FileReader(new File(getFileUrl(fileName).toURI())))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            return sb.toString().chars().mapToObj(i -> (char) i);
+        } catch (URISyntaxException | IOException e) {
+            throw new FileStatsException(e.getMessage(), e);
+        }
+    }
+
+    private Stream<Character> getCharacterStreamFromFileCommonIO(String fileName) {
+        try (FileInputStream inputStream = new FileInputStream(new File(getFileUrl(fileName).toURI()))) {
+            return IOUtils.toString(inputStream, "utf-8").chars().mapToObj(i -> (char) i);
+        } catch (IOException | URISyntaxException e) {
+            throw new FileStatsException(e.getMessage(), e);
+        }
+    }
+
+    private Map<Character, Long> populateCharacterFrequencyMap(Stream<Character> characters) {
+        return characters
+                .filter(c -> c != 32)
                 .collect(groupingBy(identity(), counting()));
+    }
 
-        mostPopularCharacter = characterMap.entrySet().stream()
-                .max(comparing(es -> es.getValue()))
+    private Character findMostPopularCharacter(Map<Character, Long> characterMap) {
+        return characterMap.entrySet().stream()
+                .max(comparing(Map.Entry::getValue))
                 .get()
                 .getKey();
     }
