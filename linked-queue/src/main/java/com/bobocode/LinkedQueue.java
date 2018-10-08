@@ -29,10 +29,10 @@ public class LinkedQueue<T> implements Queue<T> {
     @Override
     public T poll() {
         T element;
-        if (size==0) return null;
+        if (size == 0) return null;
         if (head == tail) element = removeLastElementInQueue();
         else {
-            element = head.element;
+            element = head.getElement();
             head = head.next;
             size--;
         }
@@ -40,7 +40,7 @@ public class LinkedQueue<T> implements Queue<T> {
     }
 
     private T removeLastElementInQueue() {
-        T element = head.element;
+        T element = head.getElement();
         tail = null;
         head = null;
         size--;
@@ -54,13 +54,16 @@ public class LinkedQueue<T> implements Queue<T> {
 
     @Override
     public boolean isEmpty() {
-        boolean b = head == null ? true : false;
-        return b;
+        return head == null;
     }
 
     private class Node<T> {
         T element;
         Node<T> next;
+
+        public T getElement() {
+            return element;
+        }
 
         public Node(T element, Node<T> next) {
             this.element = element;
