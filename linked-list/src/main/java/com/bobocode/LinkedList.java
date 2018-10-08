@@ -10,12 +10,6 @@ public class LinkedList<T> implements List<T> {
     private Node<T> head;
     private int size = 0;
 
-    /**
-     * Constructs an empty list
-     */
-    public LinkedList() {
-        head = null;
-    }
 
     /**
      * This method creates a list of provided elements
@@ -26,7 +20,6 @@ public class LinkedList<T> implements List<T> {
      */
     public static <T> List<T> of(T... elements) {
         LinkedList list = new LinkedList();
-
         for (T type : elements) {
             list.add(type);
         }
@@ -184,7 +177,7 @@ public class LinkedList<T> implements List<T> {
         }
     }
 
-    public static class Node<T> {
+    static class Node<T> {
         private T data;
         private Node<T> next;
 
