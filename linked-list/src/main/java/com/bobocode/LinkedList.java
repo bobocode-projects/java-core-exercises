@@ -50,25 +50,10 @@ public class LinkedList<T> implements List<T> {
         if (head == null) {
             head = newNode;
         } else {
-            Node<T> tail = findTail(head);
+            Node<T> tail = findNodeByIndex(size - 1);
             tail.next = newNode;
         }
         size++;
-    }
-
-    /**
-     * In order to make the implementation simpler this method is used instead of having one more additional parameter
-     * tail
-     *
-     * @param head the first element in the list
-     * @return the last element in the list
-     */
-    private Node<T> findTail(Node<T> head) {
-        Node<T> currentNode = Objects.requireNonNull(head);
-        while (currentNode.next != null) {
-            currentNode = currentNode.next;
-        }
-        return currentNode;
     }
 
     /**
@@ -80,7 +65,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(int index, T element) {
-        checkBoundsToAddAt(index);
+        Objects.checkIndex(index, size + 1);
         Node<T> newNode = Node.valueOf(element);
         if (index == 0) {
             newNode.next = head;
@@ -93,12 +78,6 @@ public class LinkedList<T> implements List<T> {
         size++;
     }
 
-    private void checkBoundsToAddAt(int index) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
-        }
-    }
-
     /**
      * Changes the value of an list element at specific position. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
@@ -108,7 +87,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
-        verifyElementExistAt(index);
+        Objects.checkIndex(index, size);
         Node<T> node = findNodeByIndex(index);
         node.element = element;
     }
@@ -127,18 +106,12 @@ public class LinkedList<T> implements List<T> {
     }
 
     private Node<T> findNodeByIndex(int index) {
-        verifyElementExistAt(index);
+        Objects.checkIndex(index, size);
         Node<T> currentNode = head;
         for (int i = 0; i < index; i++) {
             currentNode = currentNode.next;
         }
         return currentNode;
-    }
-
-    private void verifyElementExistAt(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
     }
 
     /**
@@ -150,7 +123,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void remove(int index) {
-        verifyElementExistAt(index);
+        Objects.checkIndex(index, size);
         if (index == 0) {
             head = head.next;
         } else {
@@ -167,14 +140,6 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean contains(T element) {
-        if (head == null) {
-            return false;
-        } else {
-            return exists(element);
-        }
-    }
-
-    private boolean exists(T element) {
         Node<T> currentNode = head;
         while (currentNode != null) {
             if (currentNode.element.equals(element)) {
@@ -182,7 +147,6 @@ public class LinkedList<T> implements List<T> {
             }
             currentNode = currentNode.next;
         }
-
         return false;
     }
 
