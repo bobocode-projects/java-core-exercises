@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class LinkedListTest {
@@ -16,6 +16,7 @@ public class LinkedListTest {
         intList.add(41);
 
         assertEquals(1, intList.size());
+        assertEquals(41, intList.get(0).intValue());
     }
 
     @Test
@@ -32,6 +33,9 @@ public class LinkedListTest {
         intList = LinkedList.of(43, 233, 54);
 
         assertEquals(3, intList.size());
+        assertEquals(43, intList.get(0).intValue());
+        assertEquals(233, intList.get(1).intValue());
+        assertEquals(54, intList.get(2).intValue());
     }
 
 
@@ -70,6 +74,7 @@ public class LinkedListTest {
         intList.add(0, 45);
 
         assertEquals(1, intList.size());
+        assertEquals(45, intList.get(0).intValue());
     }
 
     @Test
@@ -80,6 +85,7 @@ public class LinkedListTest {
         intList.add(newElementIndex, 44);
 
         assertEquals(44, intList.get(newElementIndex).intValue());
+        assertEquals(7, intList.size());
     }
 
     @Test
@@ -101,6 +107,7 @@ public class LinkedListTest {
         intList.add(newElementIdx, 66);
 
         assertEquals(66, intList.get(newElementIdx).intValue());
+        assertEquals(5, intList.size());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -118,7 +125,7 @@ public class LinkedListTest {
 
     @Test
     public void testAddElementByIndexEqualToSize() {
-        intList= LinkedList.of(1, 2, 3, 4, 5); // size = 5
+        intList = LinkedList.of(1, 2, 3, 4, 5); // size = 5
 
         intList.add(5, 111);
 
@@ -146,6 +153,7 @@ public class LinkedListTest {
         intList.set(index, 99);
 
         assertEquals(99, intList.get(index).intValue());
+        assertEquals(4, intList.size());
 
     }
 
@@ -161,6 +169,7 @@ public class LinkedListTest {
         intList.remove(0);
 
         assertEquals(6, intList.get(0).intValue());
+        assertEquals(3, intList.size());
     }
 
     @Test
@@ -170,6 +179,7 @@ public class LinkedListTest {
         intList.remove(intList.size() - 1);
 
         assertEquals(8, intList.get(intList.size() - 1).intValue());
+        assertEquals(3, intList.size());
     }
 
     @Test
@@ -180,13 +190,14 @@ public class LinkedListTest {
         intList.remove(elementIndex); // element = 3
 
         assertEquals(4, intList.get(elementIndex).intValue());
+        assertEquals(4, intList.size());
     }
 
     @Test
     public void testContainsOnEmptyList() {
         boolean contains = intList.contains(34);
 
-        assertEquals(false, contains);
+        assertFalse(contains);
     }
 
     @Test
@@ -196,15 +207,15 @@ public class LinkedListTest {
         boolean containsExistingElement = intList.contains(3);
         boolean containsNotExistingElement = intList.contains(54);
 
-        assertEquals(true, containsExistingElement);
-        assertEquals(false, containsNotExistingElement);
+        assertTrue(containsExistingElement);
+        assertFalse(containsNotExistingElement);
     }
 
     @Test
     public void testIsEmptyOnEmptyList() {
         boolean empty = intList.isEmpty();
 
-        assertEquals(true, empty);
+        assertTrue(empty);
     }
 
     @Test
@@ -213,7 +224,7 @@ public class LinkedListTest {
 
         boolean empty = intList.isEmpty();
 
-        assertEquals(false, empty);
+        assertFalse(empty);
     }
 
     @Test
