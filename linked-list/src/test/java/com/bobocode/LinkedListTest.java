@@ -107,6 +107,10 @@ public class LinkedListTest {
         intList.add(newElementIdx, 66);
 
         assertEquals(66, intList.get(newElementIdx).intValue());
+        assertEquals(43, intList.get(0).intValue());
+        assertEquals(5, intList.get(1).intValue());
+        assertEquals(6, intList.get(3).intValue());
+        assertEquals(8, intList.get(4).intValue());
         assertEquals(5, intList.size());
     }
 
@@ -146,13 +150,16 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testSetElement() {
+    public void testSetElementByIndex() {
         intList = LinkedList.of(34, 78, 9, 8);
 
         int index = 2; //element = 78
         intList.set(index, 99);
 
         assertEquals(99, intList.get(index).intValue());
+        assertEquals(34, intList.get(0).intValue());
+        assertEquals(78, intList.get(1).intValue());
+        assertEquals(8, intList.get(3).intValue());
         assertEquals(4, intList.size());
 
     }
