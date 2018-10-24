@@ -1,7 +1,5 @@
 package com.bobocode;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * This queue should be implemented using generic liked nodes. E.g. class Node<T>. In addition, this specific
  * should be thread-safe, which means that queue can be used by different threads simultaneously, and should work correct.
@@ -9,57 +7,23 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <T> a generic parameter
  */
 public class ConcurrentLinkedQueue<T> implements Queue<T> {
-    static final class Node<T> {
-        private T element;
-        private Node<T> next;
-
-        static <T> Node<T> valueOf(T element) {
-            return new Node<>(element);
-        }
-
-        private Node(T element) {
-            this.element = element;
-        }
-    }
-
-    private Node<T> head;
-    private Node<T> tail;
-    private AtomicInteger size = new AtomicInteger();
-
     @Override
-    synchronized public void add(T element) {
-        Node<T> newNode = Node.valueOf(element);
-        if (head == null) {
-            head = tail = newNode;
-        } else {
-            tail.next = newNode;
-            tail = newNode;
-        }
-        size.incrementAndGet();
+    public void add(T element) {
+        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
     }
 
     @Override
-    synchronized public T poll() {
-        if (head != null) {
-            T element = head.element;
-            head = head.next;
-            if (head == null) {
-                tail = null;
-            }
-            size.decrementAndGet();
-            return element;
-        } else {
-            return null;
-        }
+    public T poll() {
+        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
     }
 
     @Override
     public int size() {
-        return size.get();
+        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
     }
 
     @Override
     public boolean isEmpty() {
-        return head == null;
+        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
     }
 }

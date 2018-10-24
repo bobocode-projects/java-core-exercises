@@ -1,7 +1,6 @@
 package com.bobocode;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * {@link LinkedList} is a list implementation that is based on singly linked generic nodes. A node is implemented as
@@ -10,22 +9,17 @@ import java.util.stream.Stream;
  * @param <T> generic type parameter
  */
 public class LinkedList<T> implements List<T> {
-    final static class Node<T> {
+    private static class Node<T> {
         T element;
-        Node<T> next;
+        Node<T> nextValue;
 
-        private Node(T element) {
+        public Node(T element) {
             this.element = element;
-        }
-
-        static <T> Node<T> valueOf(T element) {
-            return new Node<>(element);
         }
     }
 
-    private Node<T> head;
     private int size;
-
+    private Node<T> head;
     /**
      * This method creates a list of provided elements
      *
@@ -35,7 +29,9 @@ public class LinkedList<T> implements List<T> {
      */
     public static <T> List<T> of(T... elements) {
         List<T> list = new LinkedList<>();
-        Stream.of(elements).forEach(list::add);
+        for (T element : elements) {
+            list.add(element);
+        }
         return list;
     }
 
@@ -46,12 +42,15 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(T element) {
-        Node<T> newNode = Node.valueOf(element);
+        Node<T> newNode = new Node<T>(element);
         if (head == null) {
             head = newNode;
         } else {
-            Node<T> tail = findNodeByIndex(size - 1);
-            tail.next = newNode;
+            Node<T> currentNode = head;
+            while (currentNode.nextValue != null) {
+                currentNode = currentNode.nextValue;
+            }
+            currentNode.nextValue = newNode;
         }
         size++;
     }
@@ -64,18 +63,19 @@ public class LinkedList<T> implements List<T> {
      * @param element element to add
      */
     @Override
-    public void add(int index, T element) {
-        Objects.checkIndex(index, size + 1);
-        Node<T> newNode = Node.valueOf(element);
+    public void add(int index, T element) throws IndexOutOfBoundsException {
+        Node<T> newNode = new Node<>(element);
+
         if (index == 0) {
-            newNode.next = head;
+            newNode.nextValue = head;
             head = newNode;
+            size++;
         } else {
-            Node<T> node = findNodeByIndex(index - 1);
-            newNode.next = node.next;
-            node.next = newNode;
+            Node<T> currentNode = findByIndex(index - 1);
+            newNode.nextValue = currentNode.nextValue;
+            currentNode.nextValue = newNode;
+            size++;
         }
-        size++;
     }
 
     /**
@@ -86,10 +86,18 @@ public class LinkedList<T> implements List<T> {
      * @param element a new element value
      */
     @Override
-    public void set(int index, T element) {
+    public void set(int index, T element) throws IndexOutOfBoundsException {
         Objects.checkIndex(index, size);
-        Node<T> node = findNodeByIndex(index);
-        node.element = element;
+        Node<T> newNode = new Node<>(element);
+        if (index == 0) {
+            newNode.nextValue = head.nextValue;
+            head = newNode;
+        } else {
+            Node<T> prevNode = findByIndex(index - 1);
+            Node<T> currentNode = prevNode.nextValue;
+            newNode.nextValue = currentNode.nextValue;
+            prevNode.nextValue = newNode;
+        }
     }
 
     /**
@@ -100,18 +108,8 @@ public class LinkedList<T> implements List<T> {
      * @return an element value
      */
     @Override
-    public T get(int index) {
-        Node<T> node = findNodeByIndex(index);
-        return node.element;
-    }
-
-    private Node<T> findNodeByIndex(int index) {
-        Objects.checkIndex(index, size);
-        Node<T> currentNode = head;
-        for (int i = 0; i < index; i++) {
-            currentNode = currentNode.next;
-        }
-        return currentNode;
+    public T get(int index) throws IndexOutOfBoundsException {
+        return findByIndex(index).element;
     }
 
     /**
@@ -121,16 +119,18 @@ public class LinkedList<T> implements List<T> {
      * @param index element index
      */
     @Override
-    public void remove(int index) {
-        Objects.checkIndex(index, size);
+    public void remove(int index) throws IndexOutOfBoundsException {
         if (index == 0) {
-            head = head.next;
+            head = head.nextValue;
         } else {
-            Node<T> previousNode = findNodeByIndex(index - 1);
-            previousNode.next = previousNode.next.next;
+            Node<T> prevNode = findByIndex(index - 1);
+            Node<T> nodeToRemove = prevNode.nextValue;
+            prevNode.nextValue = nodeToRemove.nextValue;
         }
         size--;
+
     }
+
 
     /**
      * Checks if a specific exists in he list
@@ -139,14 +139,18 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean contains(T element) {
-        Node<T> currentNode = head;
-        while (currentNode != null) {
-            if (currentNode.element.equals(element)) {
-                return true;
+        if (head == null) {
+            return false;
+        } else {
+            Node<T> currentNode = head;
+            while (currentNode.nextValue != null) {
+                if (currentNode.element.equals(element)) {
+                    return true;
+                }
+                currentNode = currentNode.nextValue;
             }
-            currentNode = currentNode.next;
+            return false;
         }
-        return false;
     }
 
     /**
@@ -156,7 +160,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     /**
@@ -174,7 +178,19 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        head = null;
         size = 0;
+        head = null;
     }
+
+    private Node<T> findByIndex(int index) {
+        Node<T> node = head;
+        int counter = 0;
+        while (counter < index) {
+            node = node.nextValue;
+            counter++;
+        }
+        return node;
+    }
+
+
 }
