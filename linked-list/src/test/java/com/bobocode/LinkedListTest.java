@@ -173,13 +173,13 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testRemoveElement() {
+    public void testRemoveElement() {//  0  1  2  3  4  size = 5
         intList = LinkedList.of(1, 2, 3, 4, 5);
 
-        int elementIndex = 2;
+        int elementIndex = 1;
         intList.remove(elementIndex); // element = 3
 
-        assertEquals(4, intList.get(elementIndex).intValue());
+        assertEquals(3, intList.get(elementIndex).intValue());
     }
 
     @Test
