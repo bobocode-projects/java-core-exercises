@@ -146,7 +146,6 @@ public class LinkedList<T> implements List<T> {
      * throws {@link IndexOutOfBoundsException}
      *
      * @param index element index
-     * @return an element value
      */
     @Override
     public void remove(int index) {
