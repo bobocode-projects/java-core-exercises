@@ -9,9 +9,10 @@ import java.util.Objects;
  * @param <T> generic type parameter
  */
 public class LinkedList<T> implements List<T> {
+
     private static class Node<T> {
-        T element;
-        Node<T> nextValue;
+        private T element;
+        private Node<T> next;
 
         public Node(T element) {
             this.element = element;
@@ -42,12 +43,12 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(T element) {
-        Node<T> newNode = new Node<T>(element);
+        Node<T> newNOde = new Node<>(element);
         if (head == null) {
-            head = newNode;
+            head = newNOde;
         } else {
-            Node<T> lastElement = findByIndex(size - 1);
-            lastElement.nextValue = newNode;
+            Node<T> lastNode = findByIndex(size - 1);
+            lastNode.next = newNOde;
         }
         size++;
     }
@@ -60,20 +61,18 @@ public class LinkedList<T> implements List<T> {
      * @param element element to add
      */
     @Override
-    public void add(int index, T element) throws IndexOutOfBoundsException {
-        Objects.checkIndex(index, size + 1);
+    public void add(int index, T element) {
         Node<T> newNode = new Node<>(element);
-
         if (index == 0) {
-            newNode.nextValue = head;
+            newNode.next = head;
             head = newNode;
-            size++;
         } else {
-            Node<T> currentNode = findByIndex(index - 1);
-            newNode.nextValue = currentNode.nextValue;
-            currentNode.nextValue = newNode;
-            size++;
+            Node<T> previousNode = findByIndex(index - 1);
+            Node<T> currentNode = previousNode.next;
+            previousNode.next = newNode;
+            newNode.next = currentNode;
         }
+        size++;
     }
 
     /**
@@ -84,17 +83,13 @@ public class LinkedList<T> implements List<T> {
      * @param element a new element value
      */
     @Override
-    public void set(int index, T element) throws IndexOutOfBoundsException {
+    public void set(int index, T element) {
         Objects.checkIndex(index, size);
-        Node<T> newNode = new Node<>(element);
         if (index == 0) {
-            newNode.nextValue = head.nextValue;
-            head = newNode;
+            head.element = element;
         } else {
-            Node<T> prevNode = findByIndex(index - 1);
-            Node<T> currentNode = prevNode.nextValue;
-            newNode.nextValue = currentNode.nextValue;
-            prevNode.nextValue = newNode;
+            Node<T> currentNode = findByIndex(index);
+            currentNode.element = element;
         }
     }
 
@@ -106,29 +101,29 @@ public class LinkedList<T> implements List<T> {
      * @return an element value
      */
     @Override
-    public T get(int index) throws IndexOutOfBoundsException {
-        Objects.checkIndex(index, size);
+    public T get(int index) {
         return findByIndex(index).element;
     }
+
 
     /**
      * Removes an elements by its position index. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
      * @param index element index
+     * @return an element value
      */
     @Override
-    public void remove(int index) throws IndexOutOfBoundsException {
+    public void remove(int index) {
         Objects.checkIndex(index, size);
         if (index == 0) {
-            head = head.nextValue;
+            head = head.next;
+
         } else {
-            Node<T> prevNode = findByIndex(index - 1);
-            Node<T> nodeToRemove = prevNode.nextValue;
-            prevNode.nextValue = nodeToRemove.nextValue;
+            Node<T> previousNode = findByIndex(index - 1);
+            previousNode.next = previousNode.next.next;
         }
         size--;
-
     }
 
 
@@ -139,19 +134,16 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean contains(T element) {
-        if (head == null) {
-            return false;
-        } else {
-            Node<T> currentNode = head;
-            while (currentNode.nextValue != null) {
-                if (currentNode.element.equals(element)) {
-                    return true;
-                }
-                currentNode = currentNode.nextValue;
+        Node<T> node = head;
+        while (node != null) {
+            if (node.element.equals(element)) {
+                return true;
+            }
+            node = node.next;
             }
             return false;
         }
-    }
+
 
     /**
      * Checks if a list is empty
@@ -160,7 +152,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean isEmpty() {
-        return size == 0;
+        return head == null;
     }
 
     /**
@@ -178,19 +170,19 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        size = 0;
         head = null;
+        size = 0;
     }
 
-    private Node<T> findByIndex(int index) {
-        Node<T> node = head;
+    public Node<T> findByIndex(int index) {
+        Objects.checkIndex(index, size);
         int counter = 0;
+        Node<T> currentNode = head;
         while (counter < index) {
-            node = node.nextValue;
+            currentNode = currentNode.next;
             counter++;
         }
-        return node;
+        return currentNode;
     }
-
 
 }
