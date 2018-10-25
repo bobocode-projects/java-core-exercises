@@ -65,7 +65,6 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(int index, T element) {
-        Objects.checkIndex(index, size + 1);
         Node<T> newNode = Node.valueOf(element);
         if (index == 0) {
             newNode.next = head;
@@ -87,7 +86,6 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
-        Objects.checkIndex(index, size);
         Node<T> node = findNodeByIndex(index);
         node.element = element;
     }
