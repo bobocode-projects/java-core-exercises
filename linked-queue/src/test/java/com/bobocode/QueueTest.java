@@ -14,6 +14,9 @@ public class QueueTest {
     @Test
     public void testAddElementIntoEmptyQueue() {
         integerQueue.add(1312);
+
+        assertEquals(1, integerQueue.size());
+        assertEquals(1312, integerQueue.poll().intValue());
     }
 
     @Test
@@ -37,6 +40,7 @@ public class QueueTest {
         integerQueue.add(23);
         integerQueue.add(5);
 
+        assertEquals(3, integerQueue.size());
         assertEquals(324, integerQueue.poll().intValue());
     }
 
@@ -50,6 +54,7 @@ public class QueueTest {
         integerQueue.poll(); // should poll 33
 
         assertEquals(123, integerQueue.poll().intValue());
+        assertEquals(2, integerQueue.size());
     }
 
     @Test
@@ -83,6 +88,7 @@ public class QueueTest {
         integerQueue.poll(); // should poll 99
 
         assertEquals(46, integerQueue.poll().intValue());
+        assertEquals(0, integerQueue.size());
     }
 
 }
