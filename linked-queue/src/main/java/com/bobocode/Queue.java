@@ -1,7 +1,8 @@
 package com.bobocode;
 
 /**
- * Queue is a data structure that follows "first in, first out" rule (FIFO).
+ * Queue is a data structure that follows "first in, first out" rule (FIFO). Operations {@link Queue#add(Object)} and
+ * {@link Queue#poll()} are performed in constant time O(1)
  */
 public interface Queue<T> {
     /**
