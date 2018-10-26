@@ -48,7 +48,7 @@ public class LinkedList<T> implements List<T> {
             ListE<T> n = new ListE<>();
             n.val = t;
             ListE<T> i = start;
-            while (i.node != null) {
+            while (i.node != null) { // goes until it finds the list tail
                 i = i.node;
             }
             i.node = n;
@@ -76,7 +76,7 @@ public class LinkedList<T> implements List<T> {
                 counter++;
             } else {
                 ListE<T> cn = start;
-                for (int j = 0; j < i - 1; j++) {
+                for (int j = 0; j < i - 1; j++) { // looking for previous node to be able to attach new one to it
                     cn = cn.node;
                 }
                 ListE<T> nn = new ListE<>();
@@ -97,10 +97,10 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int i, T t) {
-        if (i < 0 || i >= counter) {
+        if (i < 0 || i >= counter) { // checks the index bounds
             throw new IndexOutOfBoundsException();
         } else {
-            if (i == 0) {
+            if (i == 0) { // if index is zero we need to reassign the head reference
                 ListE<T> newListE = new ListE<>();
                 newListE.val = t;
                 newListE.node = start.node;
@@ -127,7 +127,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public T get(int i) {
-        if (i < 0 || i >= counter) {
+        if (i < 0 || i >= counter) {// checks the index bounds
             throw new IndexOutOfBoundsException();
         } else {
             ListE<T> cn = start;
@@ -215,7 +215,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        for (int i = counter - 1; i >= 0; i--) {
+        for (int i = counter - 1; i >= 0; i--) { // removes all elements starting from the end
             remove(i);
         }
     }
