@@ -7,23 +7,62 @@ package com.bobocode;
  * @param <T> a generic parameter
  */
 public class ConcurrentLinkedQueue<T> implements Queue<T> {
-    @Override
-    public void add(T element) {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+
+    private Node<T> head;
+    private Node<T> tail;
+    private int size;
+
+    private static final class Node<T> {
+
+        T element;
+        Node<T> next;
+
+
+        private Node(T element) {
+            this.element = element;
+        }
+
+        static <T> Node<T> valueOf(T element) {
+            return new Node<>(element);
+        }
     }
 
     @Override
-    public T poll() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+    public synchronized void add(T element) {
+        Node<T> newNode = Node.valueOf(element);
+        if (head == null) {
+            head = newNode;
+        }
+        else {
+            tail.next = newNode;
+        }
+            tail = newNode;
+        size++;
+    }
+
+    @Override
+    public synchronized T poll() {
+        if(head != null) {
+            T element = head.element;
+            head = head.next;
+            if(head == null) {
+                tail = null;
+            }
+            size--;
+            return element;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        return size == 0;
     }
 }
