@@ -1,8 +1,8 @@
 package com.bobocode;
 
 /**
- * {@link LinkedList} is a list implementation that is based on singly linked generic nodes. A n is implemented as
- * inner static class {@link Node<T>}
+ * {@link LinkedList} is a list implementation that is based on singly linked generic nodes. A node is implemented as
+ * inner static class {@link Node<T>}. In order to keep track on nodes, {@link LinkedList} keeps a reference to a head node.
  *
  * @param <T> generic type parameter
  */
@@ -135,7 +135,6 @@ public class LinkedList<T> implements List<T> {
      * throws {@link IndexOutOfBoundsException}
      *
      * @param index element index
-     * @return an element value
      */
     @Override
     public void remove(int index) {
