@@ -1,23 +1,21 @@
 package com.bobocode;
 
+import java.util.Arrays;
+
 /**
  * {@link LinkedList} is a list implementation that is based on singly linked generic nodes. A node is implemented as
- * inner static class {@link Node<T>}. In order to keep track on nodes, {@link LinkedList} keeps a reference to a head node.
+ * inner static class {@link ListE <T>}. In order to keep track on nodes, {@link LinkedList} keeps a reference to a head node.
  *
  * @param <T> generic type parameter
  */
 public class LinkedList<T> implements List<T> {
-    static class Node<T> {
-        T e;
-        Node<T> n;
-
-        public Node(T e) {
-            this.e = e;
-        }
+    static class ListE<T> {
+        T val;
+        ListE<T> node;
     }
 
-    private Node<T> h;
-    private int s;
+    private ListE<T> start;
+    private int counter;
 
     /**
      * This method creates a list of provided elements
@@ -27,59 +25,65 @@ public class LinkedList<T> implements List<T> {
      * @return a new list of elements the were passed as method parameters
      */
     public static <T> List<T> of(T... elements) {
-        LinkedList<T> l = new LinkedList<>();
-        for (T e : elements) {
-            l.add(e);
+        java.util.List<T> list = Arrays.asList(elements);
+        LinkedList<T> list2 = new LinkedList<>();
+        for (T e : list) {
+            list2.add(e);
         }
-        return l;
+        return list2;
     }
 
     /**
      * Adds an element to the end of the list
      *
-     * @param element element to add
+     * @param t element to add
      */
     @Override
-    public void add(T element) {
-        if (h == null) {
-            h = new Node<>(element);
+    public void add(T t) {
+        if (start == null) {
+            start = new ListE<>();
+            start.val = t;
+            counter++;
         } else {
-            Node<T> n = new Node<>(element);
-            Node<T> i = h;
-            while (i.n != null) {
-                i = i.n;
+            ListE<T> n = new ListE<>();
+            n.val = t;
+            ListE<T> i = start;
+            while (i.node != null) {
+                i = i.node;
             }
-            i.n = n;
+            i.node = n;
+            counter++;
         }
-        s++;
     }
 
     /**
      * Adds a new element to the specific position in the list. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
-     * @param index   an index of new element
-     * @param element element to add
+     * @param i an index of new element
+     * @param t element to add
      */
     @Override
-    public void add(int index, T element) {
-        if (index < 0 || index > s) {
+    public void add(int i, T t) {
+        if (i < 0 || i > counter) {
             throw new IndexOutOfBoundsException();
         } else {
-            if (index == 0) {
-                Node<T> nn = new Node<>(element);
-                nn.n = h;
-                h = nn;
-                s++;
+            if (i == 0) {
+                ListE<T> nn = new ListE<>();
+                nn.val = t;
+                nn.node = start;
+                start = nn;
+                counter++;
             } else {
-                Node<T> cn = h;
-                for (int i = 0; i < index - 1; i++) {
-                    cn = cn.n;
+                ListE<T> cn = start;
+                for (int j = 0; j < i - 1; j++) {
+                    cn = cn.node;
                 }
-                Node<T> nn = new Node<>(element);
-                nn.n = cn.n;
-                cn.n = nn;
-                s++;
+                ListE<T> nn = new ListE<>();
+                nn.val = t;
+                nn.node = cn.node;
+                cn.node = nn;
+                counter++;
             }
         }
     }
@@ -88,24 +92,28 @@ public class LinkedList<T> implements List<T> {
      * Changes the value of an list element at specific position. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
-     * @param index   an position of element to change
-     * @param element a new element value
+     * @param i an position of element to change
+     * @param t a new element value
      */
     @Override
-    public void set(int index, T element) {
-        if (index < 0 || index >= s) {
+    public void set(int i, T t) {
+        if (i < 0 || i >= counter) {
             throw new IndexOutOfBoundsException();
         } else {
-            if (index == 0) {
-                h.e = element;
+            if (i == 0) {
+                ListE<T> newListE = new ListE<>();
+                newListE.val = t;
+                newListE.node = start.node;
+                start = newListE;
             } else {
-                Node<T> cn = h;
-                for (int i = 0; i < index - 1; i++) {
-                    cn = cn.n;
+                ListE<T> prev = start;
+                for (int j = 0; j < i - 1; j++) {
+                    prev = prev.node;
                 }
-                Node<T> nn = new Node<>(element);
-                cn.n = nn;
-                nn.n = cn.n.n;
+                ListE<T> nn = new ListE<>();
+                nn.val = t;
+                nn.node = prev.node.node;
+                prev.node = nn;
             }
         }
     }
@@ -114,19 +122,21 @@ public class LinkedList<T> implements List<T> {
      * Retrieves an elements by its position index. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
-     * @param index element index
+     * @param i element index
      * @return an element value
      */
     @Override
-    public T get(int index) {
-        if (index < 0 || index >= s) {
+    public T get(int i) {
+        if (i < 0 || i >= counter) {
             throw new IndexOutOfBoundsException();
         } else {
-            Node<T> cn = h;
-            for (int i = 0; i < index; i++) {
-                cn = cn.n;
+            ListE<T> cn = start;
+            int j = 0;
+            while (j < i) {
+                cn = cn.node;
+                j++;
             }
-            return cn.e;
+            return cn.val;
         }
     }
 
@@ -134,23 +144,25 @@ public class LinkedList<T> implements List<T> {
      * Removes an elements by its position index. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
-     * @param index element index
+     * @param i element index
      */
     @Override
-    public void remove(int index) {
-        if (index < 0 || index >= s) {
+    public void remove(int i) {
+        if (i < 0 || i >= counter) {
             throw new IndexOutOfBoundsException();
         } else {
-            if (index == 0) {
-                h = h.n;
-                s--;
+            if (i == 0) {
+                start = start.node;
+                counter--;
             } else {
-                Node<T> cn = h;
-                for (int i = 0; i < index - 1; i++) {
-                    cn = cn.n;
+                ListE<T> cn = start;
+                int j = 0;
+                while (j < i - 1) {
+                    cn = cn.node;
+                    j++;
                 }
-                cn.n = cn.n.n;
-                s--;
+                cn.node = cn.node.node;
+                counter--;
             }
         }
     }
@@ -162,16 +174,16 @@ public class LinkedList<T> implements List<T> {
      * @return {@code true} if element exist, {@code false} otherwise
      */
     @Override
-    public boolean contains(T element) {
-        Node<T> cn = h;
-        boolean r = false;
-        while (cn != null) {
-            if (cn.e.equals(element)) {
-                r = true;
+    public boolean contains(T t) {
+        ListE<T> listElemt = start;
+        boolean bool = false;
+        for (; listElemt != null; ) {
+            if (listElemt.val.equals(t)) {
+                bool = true;
             }
-            cn = cn.n;
+            listElemt = listElemt.node;
         }
-        return r;
+        return bool;
     }
 
     /**
@@ -182,7 +194,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean isEmpty() {
         boolean r = false;
-        if (s == 0) {
+        if (counter == 0) {
             r = true;
         }
         return r;
@@ -195,7 +207,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public int size() {
-        return s;
+        return counter;
     }
 
     /**
@@ -203,7 +215,8 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        h = null;
-        s = 0;
+        for (int i = counter - 1; i >= 0; i--) {
+            remove(i);
+        }
     }
 }
