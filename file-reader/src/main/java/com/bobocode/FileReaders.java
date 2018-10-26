@@ -29,14 +29,6 @@ public class FileReaders {
         }
     }
 
-    private static Stream<String> openFileLinesStream(Path filePath) {
-        try {
-            return Files.lines(filePath);
-        } catch (IOException e) {
-            throw new FileReaderException("Cannot create stream of file lines!", e);
-        }
-    }
-
     private static Path createPathFromFileName(String fileName) {
         Objects.requireNonNull(fileName);
         URL fileUrl = FileReaders.class.getClassLoader().getResource(fileName);
@@ -44,6 +36,14 @@ public class FileReaders {
             return Paths.get(fileUrl.toURI());
         } catch (URISyntaxException e) {
             throw new FileReaderException("Invalid file URL",e);
+        }
+    }
+
+    private static Stream<String> openFileLinesStream(Path filePath) {
+        try {
+            return Files.lines(filePath);
+        } catch (IOException e) {
+            throw new FileReaderException("Cannot create stream of file lines!", e);
         }
     }
 }
