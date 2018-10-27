@@ -11,8 +11,8 @@ import java.util.stream.Stream;
  */
 public class LinkedList<T> implements List<T> {
     final static class Node<T> {
-        T element;
-        Node<T> next;
+        private T element;
+        private Node<T> next;
 
         private Node(T element) {
             this.element = element;
