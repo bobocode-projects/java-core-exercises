@@ -46,14 +46,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(T element) {
-        Node<T> newNode = Node.valueOf(element);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node<T> tail = findNodeByIndex(size - 1);
-            tail.next = newNode;
-        }
-        size++;
+        add(size, element);
     }
 
     /**
