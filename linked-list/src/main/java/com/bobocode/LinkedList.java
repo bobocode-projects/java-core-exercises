@@ -113,8 +113,8 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void remove(int index) {
-        Objects.checkIndex(index, size);
         if (index == 0) {
+            Objects.checkIndex(index, size);
             head = head.next;
         } else {
             Node<T> previousNode = findNodeByIndex(index - 1);
