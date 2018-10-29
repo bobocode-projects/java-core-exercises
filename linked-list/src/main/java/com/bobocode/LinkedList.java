@@ -11,16 +11,17 @@ import java.util.Objects;
 public class LinkedList<T> implements List<T> {
 
     private static class Node<T> {
-        private T element;
-        private Node<T> next;
+        T element;
+        Node<T> next;
 
         public Node(T element) {
             this.element = element;
         }
     }
 
-    private int size;
     private Node<T> head;
+    private int size;
+
     /**
      * This method creates a list of provided elements
      *
@@ -43,12 +44,12 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(T element) {
-        Node<T> newNOde = new Node<>(element);
+        Node<T> newNode = new Node<>(element);
         if (head == null) {
-            head = newNOde;
+            head = newNode;
         } else {
             Node<T> lastNode = findByIndex(size - 1);
-            lastNode.next = newNOde;
+            lastNode.next = newNode;
         }
         size++;
     }
@@ -67,10 +68,10 @@ public class LinkedList<T> implements List<T> {
             newNode.next = head;
             head = newNode;
         } else {
-            Node<T> previousNode = findByIndex(index - 1);
-            Node<T> currentNode = previousNode.next;
-            previousNode.next = newNode;
-            newNode.next = currentNode;
+            Node<T> previousElement = findByIndex(index - 1);
+            Node<T> currentElement = previousElement.next;
+            previousElement.next = newNode;
+            newNode.next = currentElement;
         }
         size++;
     }
@@ -84,13 +85,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
-        Objects.checkIndex(index, size);
-        if (index == 0) {
-            head.element = element;
-        } else {
-            Node<T> currentNode = findByIndex(index);
-            currentNode.element = element;
-        }
+        findByIndex(index).element = element;
     }
 
     /**
@@ -105,20 +100,17 @@ public class LinkedList<T> implements List<T> {
         return findByIndex(index).element;
     }
 
-
     /**
      * Removes an elements by its position index. In case provided index in out of the list bounds it
      * throws {@link IndexOutOfBoundsException}
      *
      * @param index element index
-     * @return an element value
      */
     @Override
     public void remove(int index) {
         Objects.checkIndex(index, size);
         if (index == 0) {
             head = head.next;
-
         } else {
             Node<T> previousNode = findByIndex(index - 1);
             previousNode.next = previousNode.next.next;
@@ -134,16 +126,16 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean contains(T element) {
-        Node<T> node = head;
-        while (node != null) {
-            if (node.element.equals(element)) {
+        Node<T> currentNode = head;
+        while (currentNode != null) {
+            if (currentNode.element.equals(element)) {
                 return true;
+            } else {
+                currentNode = currentNode.next;
             }
-            node = node.next;
-            }
-            return false;
         }
-
+        return false;
+    }
 
     /**
      * Checks if a list is empty
@@ -152,7 +144,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     /**
@@ -170,19 +162,18 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        head = null;
         size = 0;
+        head = null;
     }
 
-    public Node<T> findByIndex(int index) {
+    private Node<T> findByIndex(int index) {
         Objects.checkIndex(index, size);
-        int counter = 0;
         Node<T> currentNode = head;
+        int counter = 0;
         while (counter < index) {
             currentNode = currentNode.next;
             counter++;
         }
         return currentNode;
     }
-
 }
