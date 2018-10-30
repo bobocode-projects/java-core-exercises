@@ -62,11 +62,11 @@ public class ConcurrentLinkedQueueTest {
 
     @Test
     public void testAddElementsConcurrent() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-        Callable<Integer> c = () -> IntStream.rangeClosed(1, ThreadLocalRandom.current().nextInt(1000))
+        Callable<Integer> c = () -> IntStream.rangeClosed(1, ThreadLocalRandom.current().nextInt(1_00_000))
                 .peek(integerQueue::add).sum();
-        List<Callable<Integer>> callableList = IntStream.rangeClosed(1, 10).mapToObj(i -> c).collect(toList());
+        List<Callable<Integer>> callableList = IntStream.rangeClosed(1, 50).mapToObj(i -> c).collect(toList());
 
         List<Future<Integer>> futureList = executorService.invokeAll(callableList);
         int expectedSum = 0;
@@ -84,22 +84,25 @@ public class ConcurrentLinkedQueueTest {
 
     @Test
     public void testPollElementsConcurrent() throws InterruptedException, ExecutionException {
-        int expectedSum = IntStream.rangeClosed(1, ThreadLocalRandom.current().nextInt(10000))
+        int expectedSum = IntStream.rangeClosed(1, ThreadLocalRandom.current().nextInt(1_00_000))
                 .peek(integerQueue::add)
                 .sum();
 
 
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
         Callable<Integer> c = () -> {
             int localSum = 0;
             while (!integerQueue.isEmpty()) {
-                localSum += integerQueue.poll();
+                Integer element = integerQueue.poll();
+                if (element!=null) {
+                    localSum += element;
+                }
             }
             return localSum;
         };
 
-        List<Callable<Integer>> callableList = IntStream.rangeClosed(1, 10).mapToObj(i -> c).collect(toList());
+        List<Callable<Integer>> callableList = IntStream.rangeClosed(1, 50).mapToObj(i -> c).collect(toList());
 
         List<Future<Integer>> futureList = executorService.invokeAll(callableList);
         int actualSum = 0;
