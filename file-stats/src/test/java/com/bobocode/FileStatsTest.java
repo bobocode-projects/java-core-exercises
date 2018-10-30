@@ -14,12 +14,12 @@ public class FileStatsTest {
 
     @Test
     public void testCreateFileStatsFromExistingFile() {
-        FileStats fileStats = FileStats.from("sotl.txt");
+        @SuppressWarnings("unused") FileStats fileStats = FileStats.from("sotl.txt");
     }
 
     @Test(expected = FileStatsException.class)
     public void testCreateFileStatsFromNonExistingFile() {
-        FileStats fileStats = FileStats.from("blahblah.txt");
+        @SuppressWarnings("unused") FileStats fileStats = FileStats.from("blahblah.txt");
     }
 
     @Test

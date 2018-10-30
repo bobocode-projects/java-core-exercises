@@ -1,7 +1,7 @@
 package com.bobocode;
 
 /**
- * {@link FileReaders} privides an API that allow to read whole file into a {@link String} by file name.
+ * {@link FileReaders} provides an API that allow to read whole file into a {@link String} by file name.
  */
 public class FileReaders {
 
