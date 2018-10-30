@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class LinkedList<T> implements List<T> {
 
-    private static class Node<T> {
+    final static class Node<T> {
         T element;
         Node<T> next;
 
@@ -21,7 +21,6 @@ public class LinkedList<T> implements List<T> {
 
     private Node<T> head;
     private int size;
-
     /**
      * This method creates a list of provided elements
      *
@@ -68,10 +67,10 @@ public class LinkedList<T> implements List<T> {
             newNode.next = head;
             head = newNode;
         } else {
-            Node<T> previousElement = findByIndex(index - 1);
-            Node<T> currentElement = previousElement.next;
-            previousElement.next = newNode;
+            Node<T> previousNode = findByIndex(index - 1);
+            Node<T> currentElement = previousNode.next;
             newNode.next = currentElement;
+            previousNode.next = newNode;
         }
         size++;
     }
@@ -85,6 +84,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
+        Objects.checkIndex(index, size);
         findByIndex(index).element = element;
     }
 
@@ -127,7 +127,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean contains(T element) {
         Node<T> currentNode = head;
-        while (currentNode != null) {
+        while (currentNode!= null) {
             if (currentNode.element.equals(element)) {
                 return true;
             } else {
@@ -135,7 +135,9 @@ public class LinkedList<T> implements List<T> {
             }
         }
         return false;
+
     }
+
 
     /**
      * Checks if a list is empty
@@ -144,7 +146,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean isEmpty() {
-        return size == 0;
+        return head == null && size == 0;
     }
 
     /**
@@ -162,11 +164,11 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        size = 0;
         head = null;
+        size = 0;
     }
 
-    private Node<T> findByIndex(int index) {
+    public Node<T> findByIndex(int index) {
         Objects.checkIndex(index, size);
         Node<T> currentNode = head;
         int counter = 0;

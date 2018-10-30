@@ -13,35 +13,29 @@ public class LinkedQueue<T> implements Queue<T> {
         T element;
         Node<T> next;
 
-        private Node(T element) {
+        public Node(T element) {
             this.element = element;
-        }
-
-        static <T> Node<T> valueOf(T element) {
-            return new Node<>(element);
         }
     }
 
     private Node<T> head;
     private Node<T> tail;
     private int size;
-
     /**
      * Adds an element to the end of the queue.
      *
      * @param element the element to add
      */
     public void add(T element) {
-        Node<T> newNode = Node.valueOf(element);
+        Node<T> newNode = new Node<>(element);
         if (head == null) {
-            head = tail = newNode;
-        } else {
+            head = newNode;
+            tail = newNode;
+        }else {
             tail.next = newNode;
             tail = newNode;
-
         }
         size++;
-
     }
 
     /**
@@ -50,17 +44,16 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return an element that was retrieved from the head or null if queue is empty
      */
     public T poll() {
-        if (head != null) {
-            T element = head.element;
-            head = head.next;
-            if (head == null) {
-                tail = head;
-            }
-            size--;
-            return element;
-        } else {
-            return null;
+        T element;
+        if (head!=null){
+           element =head.element;
+           head = head.next;
+                   if (head == null){
+                       tail = null;
+                   }
+                   return element;
         }
+        return null;
     }
 
     /**
