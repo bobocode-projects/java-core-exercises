@@ -1,6 +1,7 @@
 package com.bobocode;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * {@link LinkedList} is a list implementation that is based on singly linked generic nodes. A node is implemented as
@@ -9,6 +10,18 @@ import java.util.Objects;
  * @param <T> generic type parameter
  */
 public class LinkedList<T> implements List<T> {
+    static class Node<T> {
+        T element;
+        Node<T> next;
+
+        private Node(T element) {
+            this.element = element;
+        }
+
+        static <T> Node<T> valueOf(T element) {
+            return new Node<>(element);
+        }
+    }
 
     private Node<T> head;
     private int size;
@@ -20,12 +33,9 @@ public class LinkedList<T> implements List<T> {
      * @param <T>      generic type
      * @return a new list of elements the were passed as method parameters
      */
-
     public static <T> List<T> of(T... elements) {
-        LinkedList<T> list = new LinkedList<>();
-        for (T element : elements) {
-            list.add(element);
-        }
+        List<T> list = new LinkedList<>();
+        Stream.of(elements).forEach(list::add);
         return list;
     }
 
@@ -36,17 +46,14 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(T element) {
-        if (this.isEmpty()) {
-            head = new Node<>(element);
-            size++;
+        Node<T> newNode = Node.valueOf(element);
+        if (head == null) {
+            head = newNode;
         } else {
-            Node<T> currentNode = head;
-            while (currentNode.next != null) {
-                currentNode = currentNode.next;
-            }
-            currentNode.next = new Node<>(element);
-            size++;
+            Node<T> tail = getElementByIndex(size - 1);
+            tail.next = newNode;
         }
+        size++;
     }
 
     /**
@@ -58,18 +65,16 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void add(int index, T element) {
-        Node<T> newNode = new Node<>(element);
-
+        Node<T> newNode = Node.valueOf(element);
         if (index == 0) {
             newNode.next = head;
             head = newNode;
-            size++;
         } else {
-            Node<T> currentNode = getNodeByIndex(index - 1);
-            newNode.next = currentNode.next;
-            currentNode.next = newNode;
-            size++;
+            Node<T> previousNode = getElementByIndex(index - 1);
+            newNode.next = previousNode.next;
+            previousNode.next = newNode;
         }
+        size++;
     }
 
     /**
@@ -81,18 +86,8 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void set(int index, T element) {
-        Objects.checkIndex(index, size);
-
-        Node<T> newNode = new Node<>(element);
-        if (index == 0) {
-            newNode.next = head.next;
-            head = newNode;
-        } else {
-            Node<T> previousNode = getNodeByIndex(index - 1);
-            Node<T> currentNode = previousNode.next;
-            newNode.next = currentNode.next;
-            previousNode.next = newNode;
-        }
+        Node<T> currentNode = getElementByIndex(index);
+        currentNode.element = element;
     }
 
     /**
@@ -104,7 +99,7 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public T get(int index) {
-        return getNodeByIndex(index).element;
+        return getElementByIndex(index).element;
     }
 
     /**
@@ -112,18 +107,15 @@ public class LinkedList<T> implements List<T> {
      * throws {@link IndexOutOfBoundsException}
      *
      * @param index element index
+     * @return an element value
      */
     @Override
     public void remove(int index) {
         if (index == 0) {
             head = head.next;
-        } else if (index == size - 1) {
-            Node<T> previousNode = getNodeByIndex(index - 1);
-            previousNode.next = null;
         } else {
-            Node<T> previousNode = getNodeByIndex(index - 1);
-            Node<T> currentNode = previousNode.next;
-            previousNode.next = currentNode.next;
+            Node<T> previousNode = getElementByIndex(index - 1);
+            previousNode.next = previousNode.next.next;
         }
         size--;
     }
@@ -136,13 +128,12 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public boolean contains(T element) {
-        if (head == null) {
+        if (element == null) {
             return false;
         }
-
-        Node currentNode = head;
-        while (currentNode.next != null) {
-            if (currentNode.element.equals(element)){
+        Node<T> currentNode = head;
+        while (currentNode != null) {
+            if (currentNode.element.equals(element)) {
                 return true;
             }
             currentNode = currentNode.next;
@@ -175,28 +166,16 @@ public class LinkedList<T> implements List<T> {
      */
     @Override
     public void clear() {
-        head = null;
-        size = 0;
+        size=0;
+        head=null;
     }
 
-    private Node<T> getNodeByIndex(int index) {
+    private Node<T> getElementByIndex(int index) {
         Objects.checkIndex(index, size);
-
         Node<T> currentNode = head;
-        int currentIndex = 0;
-        while (currentIndex < index) {
+        for (int i = 0; i < index; i++) {
             currentNode = currentNode.next;
-            currentIndex++;
         }
         return currentNode;
-    }
-
-    private static class Node<T> {
-        Node<T> next;
-        T element;
-
-        private Node(T element) {
-            this.element = element;
-        }
     }
 }
