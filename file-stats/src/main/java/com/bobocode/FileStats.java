@@ -1,5 +1,16 @@
 package com.bobocode;
 
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * {@link FileStats} provides an API that allow to get character statistic based on text file. All whitespace characters
  * are ignored.
@@ -11,8 +22,15 @@ public class FileStats {
      * @param fileName input text file name
      * @return new FileStats object created from text file
      */
+    private String fileData;
+
     public static FileStats from(String fileName) {
-        throw new UnsupportedOperationException("It's your job to make it work!"); //todo
+        String allLines = allLinesToString(fileName);
+        return new FileStats(allLines);
+    }
+
+    private FileStats(String fileData) {
+        this.fileData = fileData;
     }
 
     /**
@@ -22,7 +40,9 @@ public class FileStats {
      * @return a number that shows how many times this character appeared in a text file
      */
     public int getCharCount(char character) {
-        throw new UnsupportedOperationException("It's your job to make it work!"); //todo
+        return (int) characterStream()
+                .filter(ch -> ch == character)
+                .count();
     }
 
     /**
@@ -31,7 +51,14 @@ public class FileStats {
      * @return the most frequently appeared character
      */
     public char getMostPopularCharacter() {
-        throw new UnsupportedOperationException("It's your job to make it work!"); //todo
+        Map<Character, Long> charCountMap = characterStream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return charCountMap.entrySet()
+                .stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .orElse(null)
+                .getKey();
     }
 
     /**
@@ -41,6 +68,33 @@ public class FileStats {
      * @return {@code true} if this character has appeared in the text, and {@code false} otherwise
      */
     public boolean containsCharacter(char character) {
-        throw new UnsupportedOperationException("It's your job to make it work!"); //todo
+        Optional<Character> any = characterStream()
+                .filter(ch -> ch == character)
+                .findAny();
+        return any.isPresent();
+    }
+
+    private Stream<Character> characterStream() {
+        return fileData.chars()
+                .mapToObj(ch -> (char) ch)
+                .filter(ch -> ch != ' ');
+    }
+
+    private static String allLinesToString(String fileName) {
+        Path path = getPath(fileName);
+        try (Stream<String> lines = Files.lines(path)) {
+            return lines.collect(Collectors.joining("\n"));
+        } catch (Exception e) {
+            throw new FileStatsException(e.getMessage());
+        }
+    }
+
+    private static Path getPath(String fileName) {
+        try {
+            URL url = FileStats.class.getClassLoader().getResource(fileName);
+            return Paths.get(url.toURI());
+        } catch (Exception e) {
+            throw new FileStatsException(e.getMessage());
+        }
     }
 }
