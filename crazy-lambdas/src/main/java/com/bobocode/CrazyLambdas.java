@@ -32,7 +32,7 @@ public class CrazyLambdas {
      * @return function that repeats Strings
      */
     public static BiFunction<String, Integer, String> stringMultiplier() {
-        throw new UnsupportedOperationException("It's your job to implement this method"); // todo
+        return String::repeat;
     }
 
     /**
@@ -120,7 +120,7 @@ public class CrazyLambdas {
      * @return function that composes functions with trim() function
      */
     public static UnaryOperator<Function<String, String>> composeWithTrimFunction() {
-        throw new UnsupportedOperationException("It's your job to implement this method"); // todo
+        return stringFunction -> stringFunction.compose(String::trim);
     }
 
     /**
@@ -182,7 +182,7 @@ public class CrazyLambdas {
      * @return a high-order function that fetches a function from a function map by a given name or returns identity()
      */
     public static BiFunction<Map<String, IntUnaryOperator>, String, IntUnaryOperator> functionLoader() {
-        throw new UnsupportedOperationException("It's your job to implement this method"); // todo
+        return (functionMap, functionName) -> functionMap.getOrDefault(functionName, IntUnaryOperator.identity());
     }
 
     /**
