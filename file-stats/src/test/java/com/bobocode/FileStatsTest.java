@@ -1,29 +1,26 @@
 package com.bobocode;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(JUnit4.class)
 public class FileStatsTest {
 
-
     @Test
-    public void testCreateFileStatsFromExistingFile() {
+    void testCreateFileStatsFromExistingFile() {
         FileStats fileStats = FileStats.from("sotl.txt");
     }
 
-    @Test(expected = FileStatsException.class)
-    public void testCreateFileStatsFromNonExistingFile() {
-        FileStats fileStats = FileStats.from("blahblah.txt");
+    @Test
+    void testCreateFileStatsFromNonExistingFile() {
+        Assertions.assertThrows(FileStatsException.class, () -> FileStats.from("blahblah.txt"));
     }
 
     @Test
-    public void testGetCharCount() {
+    void testGetCharCount() {
         FileStats lambdaArticleFileStats = FileStats.from("sotl.txt");
         FileStats springCloudArticleFileStats = FileStats.from("scosb.txt");
 
@@ -35,7 +32,7 @@ public class FileStatsTest {
     }
 
     @Test
-    public void testGetMostPopularCharacter() {
+    void testGetMostPopularCharacter() {
         FileStats lambdaArticleFileStats = FileStats.from("sotl.txt");
         FileStats springCloudArticleFileStats = FileStats.from("scosb.txt");
 
@@ -49,7 +46,7 @@ public class FileStatsTest {
     }
 
     @Test
-    public void testContainsCharacter() {
+    void testContainsCharacter() {
         FileStats lambdaArticleFileStats = FileStats.from("sotl.txt");
         FileStats springCloudArticleFileStats = FileStats.from("scosb.txt");
 
