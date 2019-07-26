@@ -1,18 +1,18 @@
 package com.bobocode;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(JUnit4.class)
 public class QueueTest {
 
     private Queue<Integer> integerQueue = new LinkedQueue<>();
 
     @Test
-    public void testAddElementIntoEmptyQueue() {
+    void testAddElementIntoEmptyQueue() {
         integerQueue.add(1312);
 
         assertEquals(1, integerQueue.size());
@@ -20,22 +20,22 @@ public class QueueTest {
     }
 
     @Test
-    public void testPollElementFromEmptyQueue() {
+    void testPollElementFromEmptyQueue() {
         assertNull(integerQueue.poll());
     }
 
     @Test
-    public void testSizeOfEmptyQueue() {
+    void testSizeOfEmptyQueue() {
         assertEquals(0, integerQueue.size());
     }
 
     @Test
-    public void testIsEmptyOnEmptyQueue() {
+    void testIsEmptyOnEmptyQueue() {
         assertTrue(integerQueue.isEmpty());
     }
 
     @Test
-    public void testAddElement() {
+    void testAddElement() {
         integerQueue.add(324);
         integerQueue.add(23);
         integerQueue.add(5);
@@ -45,7 +45,7 @@ public class QueueTest {
     }
 
     @Test
-    public void testPollElement() {
+    void testPollElement() {
         integerQueue.add(33);
         integerQueue.add(123);
         integerQueue.add(222);
@@ -58,7 +58,7 @@ public class QueueTest {
     }
 
     @Test
-    public void testSize() {
+    void testSize() {
         integerQueue.add(98);
         integerQueue.add(9);
         integerQueue.add(5);
@@ -68,7 +68,7 @@ public class QueueTest {
     }
 
     @Test
-    public void testIsEmpty() {
+    void testIsEmpty() {
         integerQueue.add(3);
         integerQueue.add(9);
 
@@ -77,7 +77,7 @@ public class QueueTest {
     }
 
     @Test
-    public void testPollLastElement() {
+    void testPollLastElement() {
         integerQueue.add(8);
         integerQueue.add(123);
         integerQueue.add(99);

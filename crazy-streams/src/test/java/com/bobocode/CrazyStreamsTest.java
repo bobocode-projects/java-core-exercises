@@ -3,30 +3,35 @@ package com.bobocode;
 import com.bobocode.exception.EntityNotFoundException;
 import com.bobocode.model.Account;
 import com.bobocode.model.Sex;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * The helper method of this test class do not use Stream API intentionally. You should try to find a stream-based
  * solutions for {@link CrazyStreams} by yourself.
  */
-@RunWith(JUnit4.class)
 public class CrazyStreamsTest {
 
     private CrazyStreams streams;
     private List<Account> accounts;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         accounts = Arrays.asList(
                 new Account(1L, "Justin", "Butler", "justin.butler@gmail.com",
                         LocalDate.parse("2003-04-17"), Sex.MALE, LocalDate.parse("2016-06-13"), BigDecimal.valueOf(172966)),
@@ -41,7 +46,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testFindRichestPerson() {
+    void testFindRichestPerson() {
         Optional<Account> expectedPerson = Optional.of(accounts.get(0));
         Optional<Account> actualRichestPerson = streams.findRichestPerson();
 
@@ -49,7 +54,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testSeparateMaleAccounts() {
+    void testSeparateMaleAccounts() {
         Map<Boolean, List<Account>> expectedAccountMap = getExpectedMaleMap();
         Map<Boolean, List<Account>> maleToAccountsMap = streams.partitionMaleAccounts();
 
@@ -64,7 +69,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testFindAccountsByBirthdayMonth() {
+    void testFindAccountsByBirthdayMonth() {
         List<Account> expectedList = getExpectedList();
         List<Account> aprilAccounts = streams.findAccountsByBirthdayMonth(Month.APRIL);
 
@@ -76,7 +81,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGroupAccountsByEmailDomain() {
+    void testGroupAccountsByEmailDomain() {
         Map<String, List<Account>> expectedEmailMap = getExpectedEmailMap();
         Map<String, List<Account>> emailDomainToAccountsMap = streams.groupAccountsByEmailDomain();
 
@@ -93,14 +98,14 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGetNumOfLettersInFirstAndLastNames() {
+    void testGetNumOfLettersInFirstAndLastNames() {
         int numOfLettersInFirstAndLastNames = streams.getNumOfLettersInFirstAndLastNames();
 
         assertEquals(47, numOfLettersInFirstAndLastNames);
     }
 
     @Test
-    public void testCalculateTotalBalance() {
+    void testCalculateTotalBalance() {
         BigDecimal totalBalance = streams.calculateTotalBalance();
 
         assertEquals(BigDecimal.valueOf(241864), totalBalance);
@@ -108,7 +113,7 @@ public class CrazyStreamsTest {
 
 
     @Test
-    public void testSortByFirstAndLastNames() {
+    void testSortByFirstAndLastNames() {
         List<Account> sortedList = streams.sortByFirstAndLastNames();
 
         assertEquals(1L, sortedList.get(0).getId().longValue());
@@ -119,14 +124,14 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testContainsAccountWithEmailDomain() {
+    void testContainsAccountWithEmailDomain() {
         assertTrue(streams.containsAccountWithEmailDomain("gmail.com"));
         assertTrue(streams.containsAccountWithEmailDomain("yahoo.com"));
         assertFalse(streams.containsAccountWithEmailDomain("ukr.net"));
     }
 
     @Test
-    public void testGetBalanceByEmail() {
+    void testGetBalanceByEmail() {
         Account account = accounts.get(1);
         BigDecimal balance = streams.getBalanceByEmail(account.getEmail());
 
@@ -134,7 +139,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGetBalanceByEmailThrowsException() {
+    void testGetBalanceByEmailThrowsException() {
         String fakeEmail = "fake@mail.com";
         try {
             streams.getBalanceByEmail(fakeEmail);
@@ -146,7 +151,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testCollectAccountsById() {
+    void testCollectAccountsById() {
         Map<Long, Account> idToAccountMap = streams.collectAccountsById();
 
         assertEquals(accounts.get(0), idToAccountMap.get(1L));
@@ -156,7 +161,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testCollectBalancesByIdForAccountsCreatedOn() {
+    void testCollectBalancesByIdForAccountsCreatedOn() {
         Account account = accounts.get(3);
 
         Map<String, BigDecimal> emailToBalanceMap = streams.collectBalancesByIdForAccountsCreatedOn(account.getCreationDate().getYear());
@@ -165,7 +170,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGroupFirstNamesByLastNames() {
+    void testGroupFirstNamesByLastNames() {
         Map<String, Set<String>> lastToFirstNamesMap = streams.groupFirstNamesByLastNames();
 
         assertEquals(4, lastToFirstNamesMap.size());
@@ -176,7 +181,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGroupCommaSeparatedFirstNamesByBirthdayMonth() {
+    void testGroupCommaSeparatedFirstNamesByBirthdayMonth() {
         Map<Month, String> birthdayMonthToFirstNamesMap = streams.groupCommaSeparatedFirstNamesByBirthdayMonth();
 
         assertEquals(3, birthdayMonthToFirstNamesMap.size());
@@ -186,7 +191,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGroupTotalBalanceByCreationMonth() {
+    void testGroupTotalBalanceByCreationMonth() {
         Map<Month, BigDecimal> totalBalanceByAccountCreationMonth = streams.groupTotalBalanceByCreationMonth();
 
         assertEquals(2, totalBalanceByAccountCreationMonth.size());
@@ -195,7 +200,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGetCharacterFrequencyInFirstNames() {
+    void testGetCharacterFrequencyInFirstNames() {
         Map<Character, Long> characterFrequencyInFirstAndLastNames = streams.getCharacterFrequencyInFirstNames();
 
         assertEquals(3, characterFrequencyInFirstAndLastNames.get('a').longValue());
@@ -208,7 +213,7 @@ public class CrazyStreamsTest {
     }
 
     @Test
-    public void testGetCharacterFrequencyIgnoreCaseInFirstAndLastNames() {
+    void testGetCharacterFrequencyIgnoreCaseInFirstAndLastNames() {
         Map<Character, Long> characterFrequencyInFirstAndLastNames = streams.getCharacterFrequencyIgnoreCaseInFirstAndLastNames();
 
         assertEquals(6, characterFrequencyInFirstAndLastNames.get('a').longValue());

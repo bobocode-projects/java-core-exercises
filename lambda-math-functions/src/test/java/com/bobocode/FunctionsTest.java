@@ -1,22 +1,24 @@
 package com.bobocode;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class FunctionsTest {
     private FunctionMap<Integer, Integer> integerFunctionMap;
 
-    @Before
-    public void init(){
+    @BeforeEach
+    public void init() {
         integerFunctionMap = Functions.intFunctionMap();
     }
 
     @Test
-    public void testSquareFunction() {
+    void testSquareFunction() {
         Function<Integer, Integer> squareFunction = integerFunctionMap.getFunction("square");
 
         int actualResult = squareFunction.apply(5);
@@ -25,7 +27,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testAbsFunction(){
+    void testAbsFunction() {
         Function<Integer, Integer> absFunction = integerFunctionMap.getFunction("abs");
 
         int actualResult = absFunction.apply(-192);
@@ -34,7 +36,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testIncrementFunction(){
+    void testIncrementFunction() {
         Function<Integer, Integer> incrementFunction = integerFunctionMap.getFunction("increment");
 
         int actualResult = incrementFunction.apply(399);
@@ -43,7 +45,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testDecrementFunction(){
+    void testDecrementFunction() {
         Function<Integer, Integer> decrementFunction = integerFunctionMap.getFunction("decrement");
 
         int actualResult = decrementFunction.apply(800);
@@ -52,7 +54,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testSignFunctionOnNegativeValue(){
+    void testSignFunctionOnNegativeValue() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
         int actualResult = signFunction.apply(-123);
@@ -61,7 +63,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testSignFunctionOnPositiveValue(){
+    void testSignFunctionOnPositiveValue() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
         int actualResult = signFunction.apply(23);
@@ -70,7 +72,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testSignFunctionOnZero(){
+    void testSignFunctionOnZero() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
         int actualResult = signFunction.apply(0);
@@ -78,8 +80,8 @@ public class FunctionsTest {
         assertEquals(0, actualResult);
     }
 
-    @Test(expected = InvalidFunctionNameException.class)
-    public void testGetUnknownFunction(){
-        integerFunctionMap.getFunction("sqrt");
+    @Test
+    void testGetUnknownFunction() {
+        assertThrows(InvalidFunctionNameException.class, () -> integerFunctionMap.getFunction("sqrt"));
     }
 }

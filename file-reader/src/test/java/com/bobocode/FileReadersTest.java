@@ -1,16 +1,14 @@
 package com.bobocode;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(JUnit4.class)
+
 public class FileReadersTest {
 
     @Test
-    public void testReadWholeFileOnEmptyFile() {
+    void testReadWholeFileOnEmptyFile() {
         String fileContent = FileReaders.readWholeFile("empty.txt");
 
         assertEquals("", fileContent);
@@ -18,7 +16,7 @@ public class FileReadersTest {
     }
 
     @Test
-    public void testReadWholeFileOnFileWithEmptyLines() {
+    void testReadWholeFileOnFileWithEmptyLines() {
         String fileContent = FileReaders.readWholeFile("lines.txt");
 
         assertEquals("Hey!\n" +
@@ -29,7 +27,7 @@ public class FileReadersTest {
     }
 
     @Test
-    public void testReadWholeFile() {
+    void testReadWholeFile() {
         String fileContent = FileReaders.readWholeFile("simple.txt");
 
         assertEquals("Hello!\n" + "It's a test file.", fileContent);
