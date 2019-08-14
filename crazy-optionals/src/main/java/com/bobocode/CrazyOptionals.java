@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
+import static java.util.Comparator.comparing;
+
 public class CrazyOptionals {
 
     /**
@@ -24,7 +26,7 @@ public class CrazyOptionals {
      * @return optional object that holds text
      */
     public static Optional<String> optionalOfString(@Nullable String text) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return Optional.ofNullable(text); // Optional.ofNullable() will use Optional.empty() if text is null
     }
 
     /**
@@ -34,7 +36,10 @@ public class CrazyOptionals {
      * @param amount          money to deposit
      */
     public static void deposit(AccountProvider accountProvider, BigDecimal amount) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        accountProvider.getAccount()
+                .ifPresent(account -> account.setBalance(account.getBalance().add(amount))); // instead of using if operator
+        // you can pass Consumer object that will be used in case Optional is not empty
+        // this approach is called declarative and is usually more precise
     }
 
     /**
@@ -44,7 +49,7 @@ public class CrazyOptionals {
      * @return optional object that holds account
      */
     public static Optional<Account> optionalOfAccount(@Nonnull Account account) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return Optional.of(account); // Optional.of() will throw NullPointerException if account is null
     }
 
     /**
@@ -56,7 +61,8 @@ public class CrazyOptionals {
      * @return account from provider or defaultAccount
      */
     public static Account getAccount(AccountProvider accountProvider, Account defaultAccount) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .orElse(defaultAccount); // Optional#orElse() can be used to provide default value is case Optional is empty
     }
 
     /**
@@ -67,7 +73,10 @@ public class CrazyOptionals {
      * @param accountService
      */
     public static void processAccount(AccountProvider accountProvider, AccountService accountService) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        accountProvider.getAccount()
+                .ifPresentOrElse(accountService::processAccount, accountService::processWithNoAccount);
+        // one more declarative substitution of if-else operator.
+        // Please note its parameters: Consumer and Runnable
     }
 
     /**
@@ -78,7 +87,12 @@ public class CrazyOptionals {
      * @return provided or generated account
      */
     public static Account getOrGenerateAccount(AccountProvider accountProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .orElseGet(Accounts::generateAccount); // functionally it works exactly the same as Optional#orElse()
+        // however it is based on lazy initialization using Supplier interface, which means that default value
+        // will not be computed (created) until Supplier#get() is called, which means it will be only computed
+        // when Optional is empty. This method should be used in favor of Optional#orElse() when the creation of default
+        // value requires additional resources
     }
 
     /**
@@ -88,7 +102,8 @@ public class CrazyOptionals {
      * @return optional balance
      */
     public static Optional<BigDecimal> retrieveBalance(AccountProvider accountProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .map(Account::getBalance); // a null-safe mapping that allows you to go from Optional object to its field
     }
 
     /**
@@ -99,7 +114,9 @@ public class CrazyOptionals {
      * @return provided account
      */
     public static Account getAccount(AccountProvider accountProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .orElseThrow(() -> new AccountNotFoundException("No Account provided!")); // in case Optional is empty
+        // it allows to throw a custom exception
     }
 
     /**
@@ -109,7 +126,9 @@ public class CrazyOptionals {
      * @return optional credit balance
      */
     public static Optional<BigDecimal> retrieveCreditBalance(CreditAccountProvider accountProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .flatMap(CreditAccount::getCreditBalance); // in case your getter already return Optional, you cannot use
+        // Optional#map() because it will create Optional<Optional<Account>>. In this case Optional#flatMap() should be used
     }
 
 
@@ -121,7 +140,10 @@ public class CrazyOptionals {
      * @return optional gmail account
      */
     public static Optional<Account> retrieveAccountGmail(AccountProvider accountProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .filter(account -> account.getEmail().split("@")[1].equals("gmail.com"));
+        // in case you need to check if an Optional Account meets some criteria and return it or if it does not
+        // then return Optional.empty() and do that in a null-safe manner
     }
 
     /**
@@ -134,7 +156,9 @@ public class CrazyOptionals {
      * @return account got from either accountProvider or fallbackProvider
      */
     public static Account getAccountWithFallback(AccountProvider accountProvider, AccountProvider fallbackProvider) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accountProvider.getAccount()
+                .or(fallbackProvider::getAccount) // allows to use another Optional in case main Optional is empty
+                .orElseThrow(); // if both providers return Optional.empty() it throws NoSuchElementException
     }
 
     /**
@@ -145,7 +169,9 @@ public class CrazyOptionals {
      * @return account with the highest balance
      */
     public static Account getAccountWithMaxBalance(List<Account> accounts) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accounts.stream()
+                .max(comparing(Account::getBalance)) // as you probably know Stream#min() and Stream#max() return Optional
+                .orElseThrow();
     }
 
     /**
@@ -155,7 +181,10 @@ public class CrazyOptionals {
      * @return the lowest balance values
      */
     public static OptionalDouble findMinBalanceValue(List<Account> accounts) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accounts.stream()
+                .map(Account::getBalance) // map all stream accounts to balances
+                .mapToDouble(BigDecimal::doubleValue) // map all balances to primitive double values (returns DoubleStream)
+                .min(); // Optional API provides special classes for primitives as well
     }
 
     /**
@@ -165,7 +194,10 @@ public class CrazyOptionals {
      * @param accountService
      */
     public static void processAccountWithMaxBalance(List<Account> accounts, AccountService accountService) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        accounts.stream()
+                .max(comparing(Account::getBalance)) // returns Optional account
+                .ifPresent(accountService::processAccount); // declarative if statement and processing
+        // the last method requires Consumer<Account> as argument, it is implements using method reference
     }
 
     /**
@@ -175,7 +207,11 @@ public class CrazyOptionals {
      * @return total credit balance
      */
     public static double calculateTotalCreditBalance(List<CreditAccount> accounts) {
-        throw new UnsupportedOperationException("Some people say that method does not work until you implement it");
+        return accounts.stream()
+                .map(CreditAccount::getCreditBalance) // transforms each element of stream into Optional<BigDecimal>
+                .flatMap(Optional::stream) // uses special Optional#stream() to filter all elements that are empty
+                .mapToDouble(BigDecimal::doubleValue) // transform BigDecimal into primitive double (returns DoubleStream)
+                .sum(); // calculates a sum of primitive double
     }
 }
 
