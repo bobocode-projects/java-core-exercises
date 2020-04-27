@@ -1,7 +1,6 @@
 package com.bobocode;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.function.Function;
 
@@ -9,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class)
 public class FunctionsTest {
     private FunctionMap<Integer, Integer> integerFunctionMap;
 
@@ -18,6 +18,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(7)
     void testSquareFunction() {
         Function<Integer, Integer> squareFunction = integerFunctionMap.getFunction("square");
 
@@ -27,6 +28,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(1)
     void testAbsFunction() {
         Function<Integer, Integer> absFunction = integerFunctionMap.getFunction("abs");
 
@@ -36,6 +38,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(5)
     void testIncrementFunction() {
         Function<Integer, Integer> incrementFunction = integerFunctionMap.getFunction("increment");
 
@@ -45,6 +48,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(6)
     void testDecrementFunction() {
         Function<Integer, Integer> decrementFunction = integerFunctionMap.getFunction("decrement");
 
@@ -54,6 +58,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(2)
     void testSignFunctionOnNegativeValue() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
@@ -63,6 +68,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(3)
     void testSignFunctionOnPositiveValue() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
@@ -72,6 +78,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(4)
     void testSignFunctionOnZero() {
         Function<Integer, Integer> signFunction = integerFunctionMap.getFunction("sgn");
 
@@ -81,6 +88,7 @@ public class FunctionsTest {
     }
 
     @Test
+    @Order(8)
     void testGetUnknownFunction() {
         assertThrows(InvalidFunctionNameException.class, () -> integerFunctionMap.getFunction("sqrt"));
     }
