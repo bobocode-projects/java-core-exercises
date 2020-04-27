@@ -7,7 +7,10 @@ import com.bobocode.exception.AccountNotFoundException;
 import com.bobocode.function.AccountService;
 import com.bobocode.model.Account;
 import com.bobocode.model.CreditAccount;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -29,10 +32,11 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class )
 class CrazyOptionalsTest {
 
     @Test
+    @Order (1)
     void optionalOfStringShouldAcceptNull() {
         Optional<String> optionalString = CrazyOptionals.optionalOfString(null);
 
@@ -40,6 +44,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(2)
     void optionalOfStringShouldHoldSting() {
         Optional<String> optionalString = CrazyOptionals.optionalOfString("Hello");
 
@@ -47,6 +52,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(3)
     void depositWhenAccountExistsShouldUpdateBalance() {
         Account account = Accounts.generateAccount();
         BigDecimal balanceBeforeUpdate = account.getBalance();
@@ -58,16 +64,19 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(4)
     void depositWhenOptionalIsEmptyShouldDoNothing() {
         CrazyOptionals.deposit(Optional::empty, BigDecimal.ZERO);
     }
 
     @Test
+    @Order(5)
     void optionalOfAccountShouldNotAcceptNull() {
         assertThrows(NullPointerException.class, () -> CrazyOptionals.optionalOfAccount(null));
     }
 
     @Test
+    @Order(6)
     void optionalOfAccountShouldHoldAccount() {
         Account account = Accounts.generateAccount();
         Optional<Account> optionalAccount = CrazyOptionals.optionalOfAccount(account);
@@ -76,6 +85,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(7)
     void getAccountShouldReturnAccountGotFromProvider() {
         Account providedAccount = Accounts.generateAccount();
         Account defaultAccount = Accounts.generateAccount();
@@ -86,6 +96,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(8)
     void getAccountWhenNoAccountIsProvidedShouldReturnDefaultAccount() {
         Account defaultAccount = Accounts.generateAccount();
 
@@ -95,6 +106,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(9)
     void processAccountWhenAccountIsProvidedShouldPassAccountToService() {
         Account account = Accounts.generateAccount();
         BigDecimal initialBalance = account.getBalance();
@@ -106,6 +118,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(10)
     void processAccountWhenNoAccountProvidedShouldProcessWithNoAccount() {
         Optional<Account> optionalAccountSpy = spy(Optional.empty());
         AccountService accountService = mock(AccountService.class);
@@ -118,6 +131,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(11)
     void processAccountShouldUseNullSafeDeclarativeIfStatement() {
         Optional<Account> optionalAccountSpy = spy(Optional.empty());
 
@@ -128,6 +142,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(12)
     void getOrGenerateAccountShouldReturnAccountGotFromProvider() {
         Account providedAccount = Accounts.generateAccount();
 
@@ -137,6 +152,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(13)
     void getOrGenerateAccountWhenNoAccountIsProvidedShouldGenerateAccount() {
         Account receivedAccount = CrazyOptionals.getOrGenerateAccount(Optional::empty);
 
@@ -144,6 +160,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(14)
     void getOrGenerateAccountWhenNoAccountIsProvidedShouldUseLazyInitialization() {
         Optional<Account> optionalAccountSpy = spy(Optional.empty());
 
@@ -155,6 +172,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(15)
     void retrieveBalanceWhenAccountIsNotProvidedShouldReturnEmptyOptional() {
         Optional<BigDecimal> balance = CrazyOptionals.retrieveBalance(Optional::empty);
 
@@ -162,6 +180,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(16)
     void retrieveBalanceWhenBalanceIsNullShouldReturnEmptyOptional() {
         Account account = Accounts.generateAccount();
         account.setBalance(null);
@@ -172,6 +191,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(17)
     void retrieveBalanceShouldReturnOptionalBalance() {
         Account account = Accounts.generateAccount();
 
@@ -181,6 +201,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(18)
     void retrieveBalanceShouldUseNullSafeMapping() {
         Account account = Accounts.generateAccount();
         Optional<Account> optionalAccountSpy = spy(Optional.of(account));
@@ -196,6 +217,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(19)
     void getAccountShouldReturnProvidedAccount() {
         Account account = Accounts.generateAccount();
 
@@ -205,6 +227,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(20)
     void getAccountWhenNoAccountIsProvidedShouldThrowAccountNotFoundException() {
         AccountNotFoundException exception = assertThrows(AccountNotFoundException.class,
                 () -> CrazyOptionals.getAccount(Optional::empty));
@@ -212,6 +235,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(21)
     void retrieveCreditBalanceWhenAccountIsNotProvidedShouldReturnEmptyOptional() {
         Optional<BigDecimal> creditBalance = CrazyOptionals.retrieveCreditBalance(Optional::empty);
 
@@ -219,6 +243,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(22)
     void retrieveCreditBalanceWhenBalanceIsNullShouldReturnEmptyOptional() {
         CreditAccount account = Accounts.generateCreditAccount();
         account.setCreditBalance(null);
@@ -229,6 +254,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(23)
     void retrieveCreditBalanceShouldReturnOptionalBalance() {
         CreditAccount account = Accounts.generateCreditAccount();
 
@@ -238,6 +264,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(24)
     void retrieveCreditBalanceShouldUseNullSafeMapping() {
         CreditAccount creditAccount = Accounts.generateCreditAccount();
         Optional<CreditAccount> optionalCreditAccountSpy = spy(Optional.of(creditAccount));
@@ -253,6 +280,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(25)
     void retrieveAccountGmailWhenNoAccountProvidedShouldReturnEmptyOptional() {
         Optional<Account> optionalGmailAccount = CrazyOptionals.retrieveAccountGmail(Optional::empty);
 
@@ -260,6 +288,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(26)
     void retrieveAccountGmailWhenAccountEmailIsNotGmailShouldReturnEmptyOptional() {
         Account account = Accounts.generateCreditAccount();
         account.setEmail("bobby@yahoo.com");
@@ -270,6 +299,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(27)
     void retrieveAccountGmailWhenEmailIsGmailShouldReturnEmail() {
         Account account = Accounts.generateCreditAccount();
         account.setEmail("johnny@gmail.com");
@@ -280,6 +310,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(28)
     void retrieveAccountGmailShouldUseNullSafeFiltering() {
         Account account = Accounts.generateAccount();
         account.setEmail("johnny@gmail.com");
@@ -295,6 +326,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(29)
     void getAccountWithFallbackShouldBeRetrievedFromMainProvider() {
         Account account = Accounts.generateAccount();
         Account fallbackAccount = Accounts.generateAccount();
@@ -305,6 +337,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(30)
     void getAccountWithFallbackWhenNoAccountIsProvidedByMainProviderShouldUseFallback() {
         Account fallbackAccount = Accounts.generateAccount();
 
@@ -314,12 +347,14 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(31)
     void getAccountWithFallbackWhenNoAccountShouldThrowException() {
         assertThrows(NoSuchElementException.class,
                 () -> CrazyOptionals.getAccountWithFallback(Optional::empty, Optional::empty));
     }
 
     @Test
+    @Order(32)
     void getAccountWithFallbackShouldUseNullSafeFallbackStrategy() {
         Optional<Account> optionalAccountSpy = spy(Optional.empty());
 
@@ -334,6 +369,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(33)
     void getAccountWithMaxBalance() {
         List<Account> accounts = Accounts.generateAccountList(5);
         Account richestAccount = getMaxAccount(accounts, comparing(Account::getBalance));
@@ -344,12 +380,14 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(34)
     void getAccountWithMaxBalanceWhenListIsEmptyShouldThrowException() {
         assertThrows(NoSuchElementException.class,
                 () -> CrazyOptionals.getAccountWithMaxBalance(Collections.emptyList()));
     }
 
     @Test
+    @Order(35)
     void findMinBalanceValueShouldReturnCorrectDoubleValue() {
         List<Account> accounts = Accounts.generateAccountList(5);
         Account accountWithLowestBalance = getMaxAccount(accounts, comparing(Account::getBalance).reversed());
@@ -361,6 +399,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(36)
     void findMinBalanceValueWhenListIsEmptyShouldReturnOptionalEmpty() {
         OptionalDouble optionalMinBalance = CrazyOptionals.findMinBalanceValue(Collections.emptyList());
 
@@ -368,6 +407,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(37)
     void processAccountWithMaxBalance() {
         List<Account> accounts = Accounts.generateAccountList(5);
         Account richestAccount = getMaxAccount(accounts, comparing(Account::getBalance));
@@ -379,6 +419,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(38)
     void calculateTotalCreditBalanceShouldCalculateCorrectTotal() {
         List<CreditAccount> accounts = Accounts.generateCreditAccountList(5);
         double expectedTotal = calculateTotalCreditBalance(accounts);
@@ -389,6 +430,7 @@ class CrazyOptionalsTest {
     }
 
     @Test
+    @Order(39)
     void calculateTotalCreditBalanceWhenListIsEmptyShouldReturnZero() {
         double calculatedTotal = CrazyOptionals.calculateTotalCreditBalance(Collections.emptyList());
 
