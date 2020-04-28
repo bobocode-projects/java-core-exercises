@@ -1,6 +1,9 @@
 package com.bobocode;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -24,9 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder( MethodOrderer.OrderAnnotation.class)
 public class CrazyLambdasTest {
 
     @Test
+    @Order(1)
     void testHelloSupplier() {
         Supplier<String> helloSupplier = CrazyLambdas.helloSupplier();
 
@@ -35,6 +40,7 @@ public class CrazyLambdasTest {
 
 
     @Test
+    @Order(2)
     void testIsEmptyPredicate() {
         Predicate<String> isEmptyPredicate = CrazyLambdas.isEmptyPredicate();
 
@@ -46,6 +52,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(3)
     void testStringMultiplier() {
         BiFunction<String, Integer, String> stringMultiplier = CrazyLambdas.stringMultiplier();
 
@@ -57,6 +64,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(4)
     void testToDollarStringFunction() {
         Function<BigDecimal, String> toDollarStringFunction = CrazyLambdas.toDollarStringFunction();
         String tenDollarStr = toDollarStringFunction.apply(BigDecimal.TEN.setScale(2));
@@ -65,6 +73,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(5)
     void testLengthInRangePredicate() {
         Predicate<String> lengthInRangePredicate = CrazyLambdas.lengthInRangePredicate(4, 10);
 
@@ -82,6 +91,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(6)
     void testRandomIntSupplier() {
         IntSupplier randomIntSupplier = CrazyLambdas.randomIntSupplier();
 
@@ -92,6 +102,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(7)
     void testBoundedRandomIntSupplier() {
         IntUnaryOperator boundedRandomIntSupplier = CrazyLambdas.boundedRandomIntSupplier();
 
@@ -107,6 +118,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(8)
     void testIntSquareOperation() {
         IntUnaryOperator squareOperation = CrazyLambdas.intSquareOperation();
 
@@ -118,6 +130,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(9)
     void testLongSumOperation() {
         LongBinaryOperator sumOperation = CrazyLambdas.longSumOperation();
 
@@ -132,6 +145,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(10)
     void testStringToIntConverter() {
         ToIntFunction<String> stringToIntConverter = CrazyLambdas.stringToIntConverter();
 
@@ -143,6 +157,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(11)
     void testNMultiplyFunctionSupplier() {
         Supplier<IntUnaryOperator> fiveMultiplyFunctionSupplier = CrazyLambdas.nMultiplyFunctionSupplier(5);
 
@@ -153,6 +168,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(12)
     void testComposeWithTrimFunction() {
         UnaryOperator<Function<String, String>> composeWithTrimFunction = CrazyLambdas.composeWithTrimFunction();
         Function<String, String> toLowerWithTrim = composeWithTrimFunction.apply(String::toLowerCase);
@@ -166,6 +182,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(13)
     void testRunningThreadSupplier() throws InterruptedException {
         Queue<Integer> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
         Supplier<Thread> runningThreadSupplier = CrazyLambdas.runningThreadSupplier(() -> concurrentLinkedQueue.add(25));
@@ -181,6 +198,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(14)
     void testNewThreadRunnableConsumer() throws InterruptedException {
         Consumer<Runnable> newThreadRunnableConsumer = CrazyLambdas.newThreadRunnableConsumer();
 
@@ -194,6 +212,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(15)
     void testRunnableToThreadSupplierFunction() throws InterruptedException {
         Function<Runnable, Supplier<Thread>> runnableSupplierFunction = CrazyLambdas.runnableToThreadSupplierFunction();
         Queue<Integer> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
@@ -210,6 +229,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(16)
     void testFunctionToConditionalFunction() {
         BiFunction<IntUnaryOperator, IntPredicate, IntUnaryOperator> intFunctionToConditionalIntFunction
                 = CrazyLambdas.functionToConditionalFunction();
@@ -222,6 +242,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(17)
     void testFunctionLoader() {
         BiFunction<Map<String, IntUnaryOperator>, String, IntUnaryOperator> functionLoader = CrazyLambdas.functionLoader();
         Map<String, IntUnaryOperator> functionMap = new HashMap<>();
@@ -238,6 +259,7 @@ public class CrazyLambdasTest {
     }
 
     @Test
+    @Order(18)
     void testTrickyWellDoneSupplier() {
         Supplier<Supplier<Supplier<String>>> wellDoneSupplier = CrazyLambdas.trickyWellDoneSupplier();
 
