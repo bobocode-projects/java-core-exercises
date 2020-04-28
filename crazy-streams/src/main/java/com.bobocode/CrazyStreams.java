@@ -6,16 +6,24 @@ import com.bobocode.model.Sex;
 
 import java.math.BigDecimal;
 import java.time.Month;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.*;
-
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.partitioningBy;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Implement methods using Stream API
@@ -153,7 +161,7 @@ public class CrazyStreams {
      * @param year the year of account creation
      * @return map of account by its ids the were created in a particular year
      */
-    public Map<String, BigDecimal> collectBalancesByIdForAccountsCreatedOn(int year) {
+    public Map<String, BigDecimal> collectBalancesByEmailForAccountsCreatedOn(int year) {
         return accounts.stream()
                 .filter(account -> account.getCreationDate().getYear() == year)
                 .collect(toMap(Account::getEmail, Account::getBalance));
