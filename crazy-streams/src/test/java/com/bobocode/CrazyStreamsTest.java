@@ -173,10 +173,10 @@ public class CrazyStreamsTest {
 
     @Test
     @Order (12)
-    void testCollectBalancesByIdForAccountsCreatedOn() {
+    void testCollectBalancesByEmailForAccountsCreatedOn() {
         Account account = accounts.get(3);
 
-        Map<String, BigDecimal> emailToBalanceMap = streams.collectBalancesByIdForAccountsCreatedOn(account.getCreationDate().getYear());
+        Map<String, BigDecimal> emailToBalanceMap = streams.collectBalancesByEmailForAccountsCreatedOn(account.getCreationDate().getYear());
 
         assertEquals(Map.of(account.getEmail(), account.getBalance()), emailToBalanceMap);
     }
